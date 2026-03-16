@@ -1,0 +1,163 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-bg font-body text-[15px] leading-relaxed text-text antialiased;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    @apply font-body;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto w-full max-w-6xl px-6;
+  }
+
+  .page {
+    @apply min-h-screen pt-[70px];
+  }
+
+  .page-header {
+    @apply mb-10 border-b border-border py-12 pb-8;
+  }
+
+  .page-title {
+    @apply font-heading text-4xl font-extrabold tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply mt-2 text-base text-text2;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-bg2 p-6 transition-colors hover:border-border2;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-bg hover:-translate-y-0.5 hover:bg-[#00eec0];
+  }
+
+  .btn-outline {
+    @apply border border-border2 bg-transparent text-text hover:border-accent hover:text-accent;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent px-3.5 py-2 text-text2 hover:bg-surface hover:text-text;
+  }
+
+  .input {
+    @apply w-full rounded-[10px] border border-border bg-bg3 px-3.5 py-2.5 text-sm text-text placeholder:text-text3 focus:border-accent focus:outline-none;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-text2;
+  }
+
+  .form-group {
+    @apply mb-4 flex flex-col gap-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide;
+  }
+
+  .badge-high {
+    @apply bg-red-500/15 text-red-400;
+  }
+
+  .badge-medium {
+    @apply bg-amber-500/15 text-amber-300;
+  }
+
+  .badge-low {
+    @apply bg-green-500/15 text-green-400;
+  }
+
+  .badge-info {
+    @apply bg-blue-500/15 text-blue-300;
+  }
+
+  .alert {
+    @apply mb-4 rounded-[10px] border px-4 py-3 text-[13px];
+  }
+
+  .alert-error {
+    @apply border-red-500/30 bg-red-500/10 text-red-300;
+  }
+
+  .alert-success {
+    @apply border-green-500/30 bg-green-500/10 text-green-300;
+  }
+
+  .alert-info {
+    @apply border-blue-500/30 bg-blue-500/10 text-blue-300;
+  }
+
+  .navbar {
+    @apply fixed inset-x-0 top-0 z-[100] flex h-16 items-center border-b border-border bg-bg/85 backdrop-blur-xl;
+  }
+
+  .nav-logo {
+    @apply font-heading text-xl font-extrabold tracking-tight text-accent;
+  }
+
+  .nav-links {
+    @apply flex items-center gap-1;
+  }
+
+  .nav-link {
+    @apply rounded-lg px-3.5 py-1.5 text-sm text-text2 transition hover:bg-surface hover:text-text;
+  }
+
+  .nav-link.active {
+    @apply bg-surface text-text;
+  }
+
+  .grid-3 {
+    @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .grid-4 {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .spinner {
+    @apply h-7 w-7 animate-spin rounded-full border-2 border-border2 border-t-accent;
+  }
+
+  .loading-center {
+    @apply flex min-h-[200px] items-center justify-center;
+  }
+
+  .fade-up {
+    @apply animate-fade-up;
+  }
+
+  .fade-up-2 {
+    @apply animate-fade-up-2;
+  }
+
+  .fade-up-3 {
+    @apply animate-fade-up-3;
+  }
+
+  .fade-up-4 {
+    @apply animate-fade-up-4;
+  }
+}
