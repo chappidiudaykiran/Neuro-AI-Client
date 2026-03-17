@@ -86,7 +86,7 @@ export default function ChangePassword() {
   }
 
   return (
-    <div className="page page-auth">
+    <div className="page theme-profile">
       <div className="container max-w-xl pb-6 pt-3 sm:pt-4">
         <button
           type="button"

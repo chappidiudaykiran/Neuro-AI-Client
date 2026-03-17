@@ -56,6 +56,16 @@ export default function EditProfile() {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setImageFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => setForm((prev) => ({ ...prev, photo: reader.result }))
+      reader.readAsDataURL(file)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
@@ -87,7 +97,7 @@ export default function EditProfile() {
   }
 
   return (
-    <div className="page page-auth">
+    <div className="page theme-profile">
       <div className="container max-w-2xl pb-8 pt-3 sm:pt-4">
         <button
           type="button"

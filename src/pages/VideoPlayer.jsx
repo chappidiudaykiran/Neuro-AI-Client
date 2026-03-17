@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getCourseById, saveWatchTime } from '../api/courses'
 import YouTubePlayer from '../components/YouTubePlayer'
@@ -45,11 +45,11 @@ export default function VideoPlayer() {
     }
   }
 
-  if (loading) return <div className="page page-auth"><div className="loading-center"><div className="spinner" /></div></div>
+  if (loading) return <div className="page theme-video"><div className="loading-center"><div className="spinner" /></div></div>
 
   if (error || !course) {
     return (
-      <div className="page page-auth">
+      <div className="page theme-video">
         <div className="container">
           <div className="alert alert-error">{error || 'Course not found.'}</div>
           <Link to="/courses" className="btn btn-outline mt-3">Back to courses</Link>
@@ -64,7 +64,7 @@ export default function VideoPlayer() {
   const progress = totalVideos ? Math.round((totalCompleted / totalVideos) * 100) : 0
 
   return (
-    <div className="page page-auth">
+    <div className="page theme-video">
       {showFeedback && watchData && (
         <FeedbackModal
           subject={course}

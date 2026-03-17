@@ -1,20 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        bg: '#edf2fb',
-        bg2: '#ffffff',
-        bg3: '#f7f9fc',
-        surface: '#e8edf7',
-        border: '#dbe3f0',
-        border2: '#c8d6ea',
-        accent: '#3b82f6',
-        accent2: '#8b5cf6',
-        text: '#12294a',
-        text2: '#4f6280',
-        text3: '#7d8da8',
+        bg: 'var(--color-bg)',
+        bg2: 'var(--color-bg2)',
+        bg3: 'var(--color-bg3)',
+        surface: 'var(--color-surface)',
+        border: 'var(--color-border)',
+        border2: 'var(--color-border2)',
+        accent: 'var(--color-accent)',
+        accent2: 'var(--color-accent2)',
+        text: 'var(--color-text)',
+        text2: 'var(--color-text2)',
+        text3: 'var(--color-text3)',
       },
       fontFamily: {
         heading: ['Plus Jakarta Sans', 'sans-serif'],

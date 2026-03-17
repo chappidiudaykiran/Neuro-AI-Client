@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { getCourses } from '../api/courses'
 import CourseCard from '../components/CourseCard'
 
@@ -18,7 +18,7 @@ export default function Courses() {
   const filtered = courses.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase()))
 
   return (
-    <div className="page page-auth">
+    <div className="page theme-courses">
       <div className="container">
         <div className="page-header">
           <h1 className="page-title fade-up">Course Library</h1>
@@ -49,7 +49,7 @@ export default function Courses() {
         )}
         {!loading && !error && (
           <div className="grid-3 fade-up-3">
-            {filtered.map(c => <CourseCard key={c._id} course={c} />)}
+            {filtered.map((c, i) => <CourseCard key={c._id} course={c} index={i} />)}
           </div>
         )}
 

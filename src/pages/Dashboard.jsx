@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { triggerPredict, getResults } from '../api/predict'
 import { useAuth } from '../context/AuthContext'
 import PredictionBadge from '../components/PredictionBadge'
@@ -48,7 +48,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="page page-auth">
+    <div className="page theme-dashboard">
       <div className="container">
         <div className="page-header">
           <div className="flex flex-wrap items-start justify-between gap-4">

@@ -1,13 +1,11 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { googleAuth, loginUser } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 
-const ADMIN_CREDENTIALS = {
-  email: 'test@gmail.com',
-  password: 'test@123',
-}
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || 'test@gmail.com'
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'test@123'
 
 export default function Login() {
   const { login } = useAuth()
@@ -28,8 +26,8 @@ export default function Login() {
       const res = await loginUser(form)
       const isAdminAccount = res.data.user.role === 'admin'
       if (loginMode === 'admin') {
-        if (!(form.email === 'test@gmail.com' && form.password === 'test@123')) {
-          setError('Only test@gmail.com can login as admin.')
+        if (!(form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD)) {
+          setError(`Only ${ADMIN_EMAIL} can login as admin.`)
           setLoading(false)
           return
         }
@@ -79,7 +77,7 @@ export default function Login() {
   }
 
   return (
-    <div className="page page-auth-forms">
+    <div className="page theme-auth">
       <div className="container w-full max-w-5xl pt-4 sm:pt-6">
         <div className="auth-content-frame">
           <div className="fade-up mb-9 text-center">

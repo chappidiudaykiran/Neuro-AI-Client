@@ -1,14 +1,10 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { googleAuth, registerUser } from '../api/auth'
 import { useAuth } from '../context/AuthContext'
 import GoogleSignInButton from '../components/GoogleSignInButton'
 
-const LEARNING_STYLES = [
-  { value: 0, label: 'Visual - learn by watching' },
-  { value: 1, label: 'Reading - learn by reading' },
-  { value: 2, label: 'Kinesthetic - learn by doing' },
-]
+
 
 export default function Register() {
   const { login } = useAuth()
@@ -88,7 +84,7 @@ export default function Register() {
   }
 
   return (
-    <div className="page page-auth-forms">
+    <div className="page theme-auth">
       <div className="container w-full max-w-5xl pt-4 sm:pt-6">
         <div className="fade-up mb-8 text-center">
           <h1 className="mb-2 mt-1 font-heading text-[28px] font-extrabold tracking-tight text-emerald-950">
@@ -156,20 +152,7 @@ export default function Register() {
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="label auth-label">Learning Style</label>
-                <select className="input auth-input" value={form.learningStyle} onChange={set('learningStyle')}>
-                  {LEARNING_STYLES.map((l) => (
-                    <option key={l.value} value={l.value}>{l.label}</option>
-                  ))}
-                </select>
-              </div>
 
-              <div className="form-group">
-                <label className="label auth-label">Class Attendance - {form.attendancePercent}%</label>
-                <input className="w-full accent-accent" type="range" min="60" max="100" step="5" value={form.attendancePercent} onChange={set('attendancePercent')} />
-                <div className="mt-1 flex justify-between text-[11px] text-text3"><span>60%</span><span>100%</span></div>
-              </div>
 
               <div className="mb-6 flex flex-col gap-3">
                 {[
