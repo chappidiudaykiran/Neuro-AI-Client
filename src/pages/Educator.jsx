@@ -2,7 +2,7 @@
 import { getStudents } from '../api/predict'
 import { gradeLabel, stressLabel, stateLabel } from '../utils/helpers'
 
-export default function Educator() {
+export default function AdminDashboard() {
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -37,10 +37,10 @@ export default function Educator() {
   ]
 
   return (
-    <div className="page">
+    <div className="page page-auth">
       <div className="container">
         <div className="page-header">
-          <h1 className="page-title fade-up">Educator Dashboard</h1>
+          <h1 className="page-title fade-up">Admin Dashboard</h1>
           <p className="page-subtitle fade-up-2">{students.length} students - real-time AI predictions</p>
         </div>
 

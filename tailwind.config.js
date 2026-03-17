@@ -4,21 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#0a0e1a',
-        bg2: '#111827',
-        bg3: '#1a2235',
-        surface: '#1e2d42',
-        border: 'rgba(255,255,255,0.08)',
-        border2: 'rgba(255,255,255,0.14)',
-        accent: '#00d4aa',
-        accent2: '#0099ff',
-        text: '#f0f4ff',
-        text2: '#8b9ab5',
-        text3: '#4a5568',
+        bg: '#edf2fb',
+        bg2: '#ffffff',
+        bg3: '#f7f9fc',
+        surface: '#e8edf7',
+        border: '#dbe3f0',
+        border2: '#c8d6ea',
+        accent: '#3b82f6',
+        accent2: '#8b5cf6',
+        text: '#12294a',
+        text2: '#4f6280',
+        text3: '#7d8da8',
       },
       fontFamily: {
-        heading: ['Syne', 'sans-serif'],
-        body: ['DM Sans', 'sans-serif'],
+        heading: ['Plus Jakarta Sans', 'sans-serif'],
+        body: ['Plus Jakarta Sans', 'sans-serif'],
       },
       keyframes: {
         fadeUp: {

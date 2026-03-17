@@ -7,7 +7,9 @@ import Register  from './pages/Register'
 import Courses   from './pages/Courses'
 import VideoPlayer from './pages/VideoPlayer'
 import Dashboard from './pages/Dashboard'
-import Educator  from './pages/Educator'
+import AdminDashboard from './pages/Educator'
+import ChangePassword from './pages/ChangePassword'
+import EditProfile from './pages/EditProfile'
 
 // Redirects to /login if not logged in
 function PrivateRoute({ children }) {
@@ -18,12 +20,13 @@ function PrivateRoute({ children }) {
   return user ? children : <Navigate to="/login" replace />
 }
 
-// Redirects to /courses if not an educator
-function EducatorRoute({ children }) {
-  const { user, isEducator, loading } = useAuth()
+
+// Redirects to /courses if not an admin
+function AdminRoute({ children }) {
+  const { user, isAdmin, loading } = useAuth()
   if (loading) return null
   if (!user) return <Navigate to="/login" replace />
-  if (!isEducator) return <Navigate to="/courses" replace />
+  if (!isAdmin) return <Navigate to="/courses" replace />
   return children
 }
 
@@ -45,8 +48,23 @@ function AppRoutes() {
         <Route path="/dashboard" element={
           <PrivateRoute><Dashboard /></PrivateRoute>
         } />
-        <Route path="/educator" element={
-          <EducatorRoute><Educator /></EducatorRoute>
+        <Route path="/change-password" element={
+          <PrivateRoute><ChangePassword /></PrivateRoute>
+        } />
+        <Route path="/edit-profile" element={
+          <PrivateRoute><EditProfile /></PrivateRoute>
+        } />
+        <Route path="/change-password" element={
+          <PrivateRoute><ChangePassword /></PrivateRoute>
+        } />
+        <Route path="/student/change-password" element={
+          <PrivateRoute><ChangePassword /></PrivateRoute>
+        } />
+        <Route path="/student/change-password" element={
+          <PrivateRoute><ChangePassword /></PrivateRoute>
+        } />
+        <Route path="/admin" element={
+          <AdminRoute><AdminDashboard /></AdminRoute>
         } />
 
         {/* Catch-all */}
@@ -58,10 +76,8 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }

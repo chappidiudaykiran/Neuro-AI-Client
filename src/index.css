@@ -29,6 +29,34 @@
     @apply min-h-screen pt-[70px];
   }
 
+  .page-auth-forms {
+    background:
+      radial-gradient(1200px 420px at 10% 0%, rgba(34, 197, 94, 0.16), transparent 55%),
+      radial-gradient(1000px 360px at 90% 0%, rgba(14, 165, 233, 0.16), transparent 58%),
+      linear-gradient(180deg, #ecfdf5 0%, #f8fafc 48%, #ffffff 100%);
+  }
+
+  .auth-card {
+    @apply bg-white/95 shadow-[0_22px_44px_-22px_rgba(6,95,70,0.5)];
+  }
+
+  .auth-label {
+    @apply text-emerald-700;
+  }
+
+  .auth-input {
+    @apply bg-emerald-50/65 text-slate-900 placeholder:text-emerald-500/70;
+  }
+
+  .auth-divider {
+    @apply text-emerald-700/80;
+  }
+
+  .auth-option {
+    @apply bg-emerald-50/70;
+  }
+
+  
   .page-header {
     @apply mb-10 border-b border-border py-12 pb-8;
   }
@@ -110,7 +138,7 @@
   }
 
   .navbar {
-    @apply fixed inset-x-0 top-0 z-[100] flex h-16 items-center border-b border-border bg-bg/85 backdrop-blur-xl;
+    @apply fixed inset-x-0 top-0 z-[100] flex h-16 items-center border-b border-border bg-white;
   }
 
   .nav-logo {

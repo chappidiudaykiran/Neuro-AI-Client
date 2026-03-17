@@ -44,11 +44,11 @@ export default function Dashboard() {
   }
 
   if (loading) {
-    return <div className="page"><div className="loading-center"><div className="spinner" /></div></div>
+    return <div className="page page-auth"><div className="loading-center"><div className="spinner" /></div></div>
   }
 
   return (
-    <div className="page">
+    <div className="page page-auth">
       <div className="container">
         <div className="page-header">
           <div className="flex flex-wrap items-start justify-between gap-4">

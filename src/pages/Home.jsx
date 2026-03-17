@@ -5,7 +5,6 @@ const FEATURES = [
   { icon: 'Video', title: 'Curated Video Courses', desc: 'Hand-picked YouTube lectures for CS subjects.' },
   { icon: 'AI', title: 'AI Stress Detection', desc: 'Dual ML model tracks stress and academic performance.' },
   { icon: 'Smart', title: 'Smart Suggestions', desc: 'Personalized subject actions: focus more, break, or continue.' },
-  { icon: 'Teacher', title: 'Educator Dashboard', desc: 'Teachers monitor all student prediction states in one view.' },
 ]
 
 const SUBJECTS = [
@@ -21,13 +20,13 @@ export default function Home() {
   const { user } = useAuth()
 
   return (
-    <div className="page pt-16">
-      <section className="relative flex min-h-[88vh] items-center overflow-hidden border-b border-border bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(0,153,255,0.09),transparent),radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(0,212,170,0.07),transparent)]">
+    <div className="page">
+      <section className="relative flex min-h-[88vh] items-center overflow-hidden border-b border-border bg-bg">
         <div className="container relative z-10 py-20 text-center">
-          <div className="fade-up mb-7 inline-block rounded-full border border-accent/25 bg-accent/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
+          <div className="fade-up mb-7 inline-block rounded-full border border-accent/30 bg-accent/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
             AI-Powered Education Platform
           </div>
-          <h1 className="fade-up-2 mb-6 font-heading text-[clamp(40px,7vw,76px)] font-extrabold leading-none tracking-tight">
+          <h1 className="fade-up-2 mb-6 font-heading text-[clamp(38px,7vw,68px)] font-extrabold leading-none tracking-tight text-text">
             Learn Smarter.
             <br />
             <span className="bg-gradient-to-r from-accent to-accent2 bg-clip-text text-transparent">Stress Less.</span>
@@ -69,7 +68,7 @@ export default function Home() {
           <div className="grid-4">
             {FEATURES.map((f) => (
               <div key={f.title} className="card text-center">
-                <div className="mb-4 text-lg font-semibold text-accent">{f.icon}</div>
+                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-sm font-bold text-blue-700">{f.icon}</div>
                 <h3 className="mb-2 font-heading text-base font-bold">{f.title}</h3>
                 <p className="text-[13px] leading-relaxed text-text2">{f.desc}</p>
               </div>
@@ -89,7 +88,6 @@ export default function Home() {
       )}
 
       <footer className="border-t border-border py-7 text-center">
-        <p className="text-xs text-text3">NeuroLearn - Neuro-AI Adaptive Educational Intelligence System</p>
       </footer>
     </div>
   )

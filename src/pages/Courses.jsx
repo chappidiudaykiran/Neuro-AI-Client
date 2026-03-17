@@ -2,15 +2,10 @@
 import { getCourses } from '../api/courses'
 import CourseCard from '../components/CourseCard'
 
-const FILTERS = ['All', 'GATE Prep', 'CS Core', 'Programming']
-const STRESS_FILTERS = ['All Stress', 'High Stress', 'Medium Stress', 'Low Stress']
-
 export default function Courses() {
   const [courses, setCourses]       = useState([])
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState('')
-  const [catFilter, setCatFilter]   = useState('All')
-  const [stressFilter, setStressFilter] = useState('All Stress')
   const [search, setSearch]         = useState('')
 
   useEffect(() => {
@@ -20,26 +15,19 @@ export default function Courses() {
       .finally(() => setLoading(false))
   }, [])
 
-  const filtered = courses.filter(c => {
-    const matchCat    = catFilter === 'All' || c.category === catFilter
-    const matchStress = stressFilter === 'All Stress' ||
-      c.stressTag === stressFilter.toLowerCase().replace(' ', '_')
-    const matchSearch = !search ||
-      c.name.toLowerCase().includes(search.toLowerCase())
-    return matchCat && matchStress && matchSearch
-  })
+  const filtered = courses.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase()))
 
   return (
-    <div className="page">
+    <div className="page page-auth">
       <div className="container">
         <div className="page-header">
           <h1 className="page-title fade-up">Course Library</h1>
           <p className="page-subtitle fade-up-2">
-            {courses.length} subjects Â· watch videos Â· get AI-powered insights
+            {courses.length} subjects
           </p>
         </div>
 
-        {/* Search + filters */}
+        {/* Search */}
         <div className="fade-up-2 mb-8">
           <input
             placeholder="Search subjects..."
@@ -47,30 +35,6 @@ export default function Courses() {
             onChange={e => setSearch(e.target.value)}
             className="input mb-4 max-w-[360px]"
           />
-
-          <div className="flex flex-wrap gap-2">
-            {FILTERS.map(f => (
-              <button key={f}
-                onClick={() => setCatFilter(f)}
-                className={`btn rounded-full px-3.5 py-1.5 text-xs ${catFilter === f
-                  ? 'border border-accent bg-accent text-bg'
-                  : 'border border-border bg-bg2 text-text2'}`}>
-                {f}
-              </button>
-            ))}
-
-            <div className="mx-1 w-px bg-border" />
-
-            {STRESS_FILTERS.map(f => (
-              <button key={f}
-                onClick={() => setStressFilter(f)}
-                className={`btn rounded-full px-3.5 py-1.5 text-xs ${stressFilter === f
-                  ? 'border border-accent bg-accent/15 text-accent'
-                  : 'border border-border bg-bg2 text-text2'}`}>
-                {f}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Content */}

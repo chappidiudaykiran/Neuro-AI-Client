@@ -29,10 +29,18 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('neuro_user')
   }
 
-  const isEducator = user?.role === 'educator'
+  const updateUser = (nextUserData) => {
+    setUser((prev) => {
+      const merged = { ...(prev || {}), ...(nextUserData || {}) }
+      localStorage.setItem('neuro_user', JSON.stringify(merged))
+      return merged
+    })
+  }
+
+  const isAdmin = user?.role === 'admin'
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, isEducator }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, updateUser, isAdmin }}>
       {children}
     </AuthContext.Provider>
   )

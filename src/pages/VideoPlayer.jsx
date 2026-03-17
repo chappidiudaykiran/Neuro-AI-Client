@@ -45,11 +45,11 @@ export default function VideoPlayer() {
     }
   }
 
-  if (loading) return <div className="page"><div className="loading-center"><div className="spinner" /></div></div>
+  if (loading) return <div className="page page-auth"><div className="loading-center"><div className="spinner" /></div></div>
 
   if (error || !course) {
     return (
-      <div className="page">
+      <div className="page page-auth">
         <div className="container">
           <div className="alert alert-error">{error || 'Course not found.'}</div>
           <Link to="/courses" className="btn btn-outline mt-3">Back to courses</Link>
@@ -64,7 +64,7 @@ export default function VideoPlayer() {
   const progress = totalVideos ? Math.round((totalCompleted / totalVideos) * 100) : 0
 
   return (
-    <div className="page">
+    <div className="page page-auth">
       {showFeedback && watchData && (
         <FeedbackModal
           subject={course}
