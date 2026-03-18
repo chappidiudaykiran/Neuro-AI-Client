@@ -47,9 +47,26 @@ export default function Courses() {
             No courses match your filters.
           </div>
         )}
-        {!loading && !error && (
-          <div className="grid-3 fade-up-3">
-            {filtered.map((c, i) => <CourseCard key={c._id} course={c} index={i} />)}
+        {!loading && !error && filtered.length > 0 && (
+          <div className="space-y-16 fade-up-3">
+            {Array.from(new Set(filtered.map(c => c.category))).sort((a, b) => {
+              const order = ['CS Core', 'GATE Prep', 'Programming'];
+              const indexA = order.indexOf(a);
+              const indexB = order.indexOf(b);
+              if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+              if (indexA !== -1) return -1;
+              if (indexB !== -1) return 1;
+              return a.localeCompare(b);
+            }).map(category => (
+              <div key={category}>
+                <h2 className="text-2xl font-bold font-heading mb-6 border-b border-border pb-2 inline-block text-text capitalize">{category}</h2>
+                <div className="grid-3">
+                  {filtered.filter(c => c.category === category).map((c) => (
+                    <CourseCard key={c._id} course={c} index={filtered.findIndex(tc => tc._id === c._id)} />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

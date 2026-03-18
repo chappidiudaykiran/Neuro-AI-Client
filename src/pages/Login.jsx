@@ -45,6 +45,7 @@ export default function Login() {
         setLoading(false)
         return
       }
+
       login(res.data.user, res.data.token)
       navigate('/courses')
     } catch (err) {
@@ -81,10 +82,7 @@ export default function Login() {
       <div className="container w-full max-w-5xl pt-4 sm:pt-6">
         <div className="auth-content-frame">
           <div className="fade-up mb-9 text-center">
-            <h2 className="mb-2 text-[18px] font-extrabold leading-tight text-emerald-700 sm:text-[20px]">
-              Neuro-AI Adaptive Educational Intelligence System
-            </h2>
-            <h1 className="mb-2 mt-1 font-heading text-[28px] font-extrabold tracking-tight text-emerald-950">
+            <h1 className="mb-2 mt-1 font-heading text-[28px] font-extrabold tracking-tight text-text">
               {loginMode === 'admin' ? 'Admin Access' : 'Welcome back'}
             </h1>
             <p className="text-sm text-text2">
@@ -127,6 +125,9 @@ export default function Login() {
             {loginMode === 'user' && (
               <p className="mt-5 text-center text-[13px] text-text2">
                 New user? <Link to="/register" className="text-accent">Create an account</Link>
+                <br />
+                <br />
+                Are you a teacher? <Link to="/educator-login" className="text-accent underline">Educator Login Here</Link>
               </p>
             )}
 
@@ -139,7 +140,7 @@ export default function Login() {
                   setError('')
                   setForm({ email: '', password: '' })
                 }}
-                className="text-[14px] text-text3 hover:text-accent"
+                className="text-[14px] font-semibold text-text2 hover:text-accent"
               >
                 {loginMode === 'user' ? 'Admin Login' : 'User Login'}
               </button>

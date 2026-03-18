@@ -5,7 +5,7 @@ import ecurveLogo from '../assets/ecurve_logo_transparent.png'
 import ecurveLogoDark from '../assets/ecurve_logo_darkmode.png'
 
 export default function Navbar() {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isAdmin, isEducator } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -56,7 +56,12 @@ export default function Navbar() {
             </button>
           )}
           <NavLink to="/" className="flex items-center">
-            <img src={isDark ? ecurveLogoDark : ecurveLogo} alt="Ecurve" className="h-6 w-auto max-w-[150px] object-contain sm:h-8 md:h-9" />
+            <img 
+              src={isDark ? ecurveLogoDark : ecurveLogo} 
+              alt="Ecurve" 
+              className="h-[22px] w-auto max-w-[140px] object-contain sm:h-7 md:h-8" 
+              style={isDark ? { filter: 'brightness(0) invert(1)' } : {}}
+            />
           </NavLink>
         </div>
 
@@ -72,7 +77,12 @@ export default function Navbar() {
               </NavLink>
               {isAdmin && (
                 <NavLink to="/admin" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-                  Admin
+                  Content Admin
+                </NavLink>
+              )}
+              {isEducator && (
+                <NavLink to="/educator" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+                  Student Insights
                 </NavLink>
               )}
             </div>
@@ -167,7 +177,12 @@ export default function Navbar() {
           </NavLink>
           {isAdmin && (
             <NavLink to="/admin" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
-              Admin
+              Content Admin
+            </NavLink>
+          )}
+          {isEducator && (
+            <NavLink to="/educator" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
+              Student Insights
             </NavLink>
           )}
         </div>

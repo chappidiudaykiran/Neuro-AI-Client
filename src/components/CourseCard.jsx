@@ -3,18 +3,7 @@ import { useNavigate } from 'react-router-dom'
 export default function CourseCard({ course, index = 0 }) {
   const navigate = useNavigate()
 
-  // Generate repeatable random-looking data based on course ID for UI aesthetics
-  const idStr = course._id.toString()
-  const getHash = (str) => {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    return Math.abs(hash)
-  }
-  const hash = getHash(idStr)
-  const rating = (4.0 + (hash % 10) / 10).toFixed(1) // 4.0 to 4.9
-  const learners = ((hash % 500) + 10) + 'k+'
+
 
   // Assortment of unique vibrant themes with custom abstract background icons representing tech concepts
   const designs = [
@@ -121,13 +110,7 @@ export default function CourseCard({ course, index = 0 }) {
         {/* Abstract Background Icon */}
         {design.icon}
 
-        {/* Rating Badge */}
-        <div className="absolute right-4 top-4 flex items-center gap-1 rounded bg-black/30 px-2.5 py-1 text-[11px] font-extrabold text-white backdrop-blur-sm z-10">
-          <svg className="h-3 w-3 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          {rating}
-        </div>
+
         
         {/* Course info top */}
         <div className="flex h-full flex-col justify-end text-white relative z-10">
@@ -147,20 +130,7 @@ export default function CourseCard({ course, index = 0 }) {
           {course.shortName} - Core Curriculum
         </h3>
         
-        <div className="mb-6 flex items-center gap-2 text-[13px] text-text2 font-medium">
-          <svg className="w-4 h-4 text-text3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-          Beginner to Advanced
-        </div>
 
-        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-text3 uppercase tracking-wide">
-            <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-            {learners} interested
-          </div>
-          <div className="text-[13px] font-bold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-500 transition-colors">
-            Explore now
-          </div>
-        </div>
       </div>
     </div>
   )

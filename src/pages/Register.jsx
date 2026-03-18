@@ -87,10 +87,7 @@ export default function Register() {
     <div className="page theme-auth">
       <div className="container w-full max-w-5xl pt-4 sm:pt-6">
         <div className="fade-up mb-8 text-center">
-          <h1 className="mb-2 mt-1 font-heading text-[28px] font-extrabold tracking-tight text-emerald-950">
-            Neuro-AI Adaptive Educational Intelligence System
-          </h1>
-          <h2 className="mb-2 text-[18px] font-extrabold leading-tight text-emerald-700 sm:text-[20px]">
+          <h2 className="mb-2 text-[18px] font-extrabold leading-tight text-text sm:text-[20px]">
             Create your account
           </h2>
           <p className="text-xs text-text2">Step {step} of 2 - {step === 1 ? 'Basic info' : 'Learning profile'}</p>
@@ -131,8 +128,19 @@ export default function Register() {
                 <input className="input auth-input" type="password" placeholder="Min 6 characters" value={form.password} onChange={set('password')} required minLength={6} />
               </div>
 
-
-              {/* Only student registration allowed */}
+              <div className="form-group mb-6">
+                <label className="label auth-label">I am joining as a:</label>
+                <div className="flex gap-4 mt-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="role" value="student" checked={form.role === 'student'} onChange={set('role')} className="accent-accent" />
+                    <span className="text-sm font-medium">Student</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="role" value="educator" checked={form.role === 'educator'} onChange={set('role')} className="accent-accent" />
+                    <span className="text-sm font-medium">Educator</span>
+                  </label>
+                </div>
+              </div>
 
               <button className="btn btn-primary w-full" type="submit">Continue <span style={{fontSize: '18px', verticalAlign: 'middle'}}>&rarr;</span></button>
             </form>

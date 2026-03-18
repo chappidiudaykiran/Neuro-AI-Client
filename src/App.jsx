@@ -1,13 +1,15 @@
-﻿import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar    from './components/Navbar'
 import Home      from './pages/Home'
 import Login     from './pages/Login'
+import EducatorLogin from './pages/EducatorLogin'
 import Register  from './pages/Register'
 import Courses   from './pages/Courses'
 import VideoPlayer from './pages/VideoPlayer'
 import Dashboard from './pages/Dashboard'
-import AdminDashboard from './pages/Educator'
+import AdminDashboard from './pages/Admin'
+import EducatorDashboard from './pages/Educator'
 import ChangePassword from './pages/ChangePassword'
 import EditProfile from './pages/EditProfile'
 
@@ -30,6 +32,15 @@ function AdminRoute({ children }) {
   return children
 }
 
+// Redirects to /courses if not an educator
+function EducatorRoute({ children }) {
+  const { user, isEducator, loading } = useAuth()
+  if (loading) return null
+  if (!user) return <Navigate to="/login" replace />
+  if (!isEducator) return <Navigate to="/courses" replace />
+  return children
+}
+
 function AppRoutes() {
   return (
     <>
@@ -37,6 +48,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/"         element={<Home />} />
         <Route path="/login"    element={<Login />} />
+        <Route path="/educator-login" element={<EducatorLogin />} />
         <Route path="/register" element={<Register />} />
 
         <Route path="/courses" element={
@@ -65,6 +77,9 @@ function AppRoutes() {
         } />
         <Route path="/admin" element={
           <AdminRoute><AdminDashboard /></AdminRoute>
+        } />
+        <Route path="/educator" element={
+          <EducatorRoute><EducatorDashboard /></EducatorRoute>
         } />
 
         {/* Catch-all */}

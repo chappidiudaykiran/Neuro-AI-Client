@@ -1,93 +1,105 @@
-﻿import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-
-const FEATURES = [
-  { icon: 'Video', title: 'Curated Video Courses', desc: 'Hand-picked YouTube lectures for CS subjects.' },
-  { icon: 'AI', title: 'AI Stress Detection', desc: 'Dual ML model tracks stress and academic performance.' },
-  { icon: 'Smart', title: 'Smart Suggestions', desc: 'Personalized subject actions: focus more, break, or continue.' },
-]
-
-const SUBJECTS = [
-  { name: 'GATE Preparation', tag: 'High Stress', tone: 'border-red-400/25 bg-red-500/10 text-red-300' },
-  { name: 'Data Structures', tag: 'Medium Stress', tone: 'border-amber-400/25 bg-amber-500/10 text-amber-300' },
-  { name: 'Operating Systems', tag: 'High Stress', tone: 'border-red-400/25 bg-red-500/10 text-red-300' },
-  { name: 'C Programming', tag: 'Low Stress', tone: 'border-green-400/25 bg-green-500/10 text-green-300' },
-  { name: 'DBMS', tag: 'Medium Stress', tone: 'border-amber-400/25 bg-amber-500/10 text-amber-300' },
-  { name: 'Computer Networks', tag: 'High Stress', tone: 'border-red-400/25 bg-red-500/10 text-red-300' },
-]
+import { getCourses } from '../api/courses'
+import CourseCard from '../components/CourseCard'
 
 export default function Home() {
   const { user } = useAuth()
+  const [courses, setCourses] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getCourses()
+      .then(r => setCourses(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
-    <div className="page">
-      <section className="relative flex min-h-[88vh] items-center overflow-hidden border-b border-border bg-bg">
+    <div className="page bg-bg text-text selection:bg-accent/30 selection:text-accent">
+      
+      {/* 1. Hero Section */}
+      <section className="relative flex min-h-[90vh] items-center overflow-hidden border-b border-border">
+        {/* Abstract Background Orbs */}
+        <div className="absolute top-0 right-0 -m-32 h-96 w-96 rounded-full bg-accent/20 blur-[100px]" />
+        <div className="absolute bottom-0 left-0 -m-32 h-[30rem] w-[30rem] rounded-full bg-blue-600/10 blur-[120px]" />
+        
         <div className="container relative z-10 py-20 text-center">
-          <div className="fade-up mb-7 inline-block rounded-full border border-accent/30 bg-accent/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
-            AI-Powered Education Platform
+          <div className="fade-up inline-flex items-center gap-2 mb-8 rounded-full border border-border bg-bg2 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-text2 shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Accelerate Your Growth
           </div>
-          <h1 className="fade-up-2 mb-6 font-heading text-[clamp(38px,7vw,68px)] font-extrabold leading-none tracking-tight text-text">
-            Learn Smarter.
-            <br />
-            <span className="bg-gradient-to-r from-accent to-accent2 bg-clip-text text-transparent">Stress Less.</span>
+          
+          <h1 className="fade-up-2 mb-6 font-heading text-[clamp(40px,8vw,72px)] font-extrabold leading-[1.05] tracking-tight">
+            Unlock Your True <br/>
+            <span className="bg-gradient-to-r from-accent to-accent2 bg-clip-text text-transparent drop-shadow-sm">
+              Learning Potential
+            </span>
           </h1>
-          <p className="fade-up-3 mx-auto mb-10 max-w-[560px] text-lg leading-relaxed text-text2">
-            Watch curated video lectures, rate your experience, and let AI predict your performance and guide your study plan in real time.
+          
+          <p className="fade-up-3 mx-auto mb-10 max-w-2xl text-[1.1rem] leading-relaxed text-text2 font-medium">
+            Bend your learning curve with personalized, expertly curated courses designed to help you excel. Learn at your own pace, master new topics, and achieve academic brilliance.
           </p>
-          <div className="fade-up-4 flex flex-wrap justify-center gap-3">
+          
+          <div className="fade-up-4 flex flex-col sm:flex-row justify-center gap-4">
             {user ? (
-              <Link to="/courses" className="btn btn-primary px-8 py-3 text-[15px]">Browse Courses -&gt;</Link>
+              <Link to="/courses" className="btn btn-primary px-8 py-3.5 text-[15px] shadow-lg shadow-accent/25 hover:-translate-y-1 transition-transform">Enter Study Dashboard</Link>
             ) : (
               <>
-                <Link to="/register" className="btn btn-primary px-8 py-3 text-[15px]">Get Started Free -&gt;</Link>
-                <Link to="/login" className="btn btn-outline px-7 py-3 text-[15px]">Sign In</Link>
+                <Link to="/register" className="btn btn-primary px-8 py-3.5 text-[15px] shadow-lg shadow-accent/25 hover:-translate-y-1 transition-transform">Start Learning Now</Link>
+                <Link to="/login" className="btn bg-bg2 border border-border text-text hover:bg-border px-8 py-3.5 text-[15px] shadow-sm transition-colors">Educator Login</Link>
               </>
             )}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border py-14">
+      {/* 2. Featured Courses */}
+      <section className="py-24 border-b border-border relative bg-bg2/30">
         <div className="container">
-          <p className="mb-7 text-center text-xs uppercase tracking-[0.18em] text-text3">Subjects covered</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {SUBJECTS.map((s) => (
-              <div key={s.name} className="flex items-center gap-2 rounded-full border border-border bg-bg2 px-4 py-2 text-sm">
-                <span className="text-text">{s.name}</span>
-                <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${s.tone}`}>{s.tag}</span>
-              </div>
-            ))}
+          <div className="text-center mb-16">
+             <h2 className="font-heading text-3xl font-extrabold md:text-4xl mb-4">Explore Our Curriculum</h2>
+             <p className="max-w-xl mx-auto text-text2">Start making progress today with our curated selection of expert subjects.</p>
           </div>
+          
+          {loading ? (
+            <div className="flex justify-center py-10"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
+          ) : courses.length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-3 gap-6 mb-12">
+                {[
+                  courses.find(c => c.category === 'CS Core'),
+                  courses.find(c => c.category === 'GATE Prep'),
+                  courses.find(c => c.category === 'Programming') || courses.find(c => c.category === 'MERN Stack')
+                ].filter(Boolean)
+                 .concat(courses)
+                 .filter((v, i, a) => a.findIndex(t => t._id === v._id) === i)
+                 .slice(0, 3)
+                 .map((c, i) => (
+                   <div key={c._id} className="fade-up" style={{ animationDelay: `${i * 100}ms` }}>
+                     <CourseCard course={c} index={i} />
+                   </div>
+                ))}
+              </div>
+              <div className="text-center fade-up-3">
+                <Link to="/courses" className="btn bg-bg2 border border-border text-text hover:bg-border hover:border-accent/40 px-8 py-3.5 shadow-sm inline-flex items-center gap-2 group transition-all">
+                  View All Courses 
+                  <svg className="w-4 h-4 text-accent transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </Link>
+              </div>
+            </>
+          ) : null}
         </div>
       </section>
 
-      <section className="border-b border-border py-20">
-        <div className="container">
-          <h2 className="mb-2 text-center font-heading text-4xl font-extrabold tracking-tight">How it works</h2>
-          <p className="mb-12 text-center text-text2">Four steps from watching to personalized insights</p>
-          <div className="grid-4">
-            {FEATURES.map((f) => (
-              <div key={f.title} className="card text-center">
-                <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-sm font-bold text-blue-700">{f.icon}</div>
-                <h3 className="mb-2 font-heading text-base font-bold">{f.title}</h3>
-                <p className="text-[13px] leading-relaxed text-text2">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {!user && (
-        <section className="border-b border-border py-20">
-          <div className="container text-center">
-            <h2 className="mb-4 font-heading text-3xl font-extrabold tracking-tight">Ready to study smarter?</h2>
-            <p className="mb-8 text-text2">Join and let AI guide your learning journey.</p>
-            <Link to="/register" className="btn btn-primary px-9 py-3 text-[15px]">Create Free Account -&gt;</Link>
-          </div>
-        </section>
-      )}
-
-      <footer className="border-t border-border py-7 text-center">
+      {/* Footer */}
+      <footer className="border-t border-border py-8 text-center text-sm text-text3 bg-bg2 flex flex-col items-center">
+        <p className="font-medium text-text2">© 2026 ECurve Platform.</p>
+        <p className="mt-1 opacity-80">Empowering learners everywhere to achieve their greatest potential.</p>
       </footer>
     </div>
   )

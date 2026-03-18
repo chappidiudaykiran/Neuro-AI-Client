@@ -93,7 +93,13 @@ export default function AdminSubjectForm({ onSuccess }) {
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <div className="form-group">
             <label className="label">Category</label>
-            <input className="input" placeholder="e.g. STEM, Programming" value={form.category} onChange={handleFieldChange('category')} required />
+            <input className="input" list="category-suggestions" placeholder="e.g. Programming, MERN Stack" value={form.category} onChange={handleFieldChange('category')} required />
+            <datalist id="category-suggestions">
+              <option value="Programming" />
+              <option value="MERN Stack" />
+              <option value="GATE Prep" />
+              <option value="CS Core" />
+            </datalist>
           </div>
           <div className="form-group">
             <label className="label">Description</label>
