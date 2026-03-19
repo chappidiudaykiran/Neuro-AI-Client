@@ -47,7 +47,7 @@ export default function Login() {
       }
 
       login(res.data.user, res.data.token)
-      navigate('/courses')
+      navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password.')
     } finally {
@@ -66,7 +66,7 @@ export default function Login() {
         return
       }
       login(res.data.user, res.data.token)
-      navigate('/courses')
+      navigate('/')
     } catch (err) {
       setError(
         err.response?.data?.message ||

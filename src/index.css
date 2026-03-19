@@ -252,3 +252,27 @@
     @apply animate-fade-up-4;
   }
 }
+
+/* Hero animated gradient text */
+.hero-gradient-text {
+  background: linear-gradient(90deg, var(--color-accent), #a855f7, var(--color-accent), #06b6d4);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}

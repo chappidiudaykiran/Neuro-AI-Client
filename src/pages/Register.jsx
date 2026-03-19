@@ -48,7 +48,7 @@ export default function Register() {
       }
       const res = await registerUser(payload)
       login(res.data.user, res.data.token)
-      navigate('/courses')
+      navigate('/')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Try again.')
     } finally {
@@ -72,7 +72,7 @@ export default function Register() {
       }
       const res = await googleAuth(payload)
       login(res.data.user, res.data.token)
-      navigate(res.data.user.role === 'educator' ? '/educator' : '/courses')
+      navigate(res.data.user.role === 'educator' ? '/educator' : '/')
     } catch (err) {
       setError(
         err.response?.data?.message ||

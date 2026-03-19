@@ -6,6 +6,7 @@ import Login     from './pages/Login'
 import EducatorLogin from './pages/EducatorLogin'
 import Register  from './pages/Register'
 import Courses   from './pages/Courses'
+import CategoryCourses from './pages/CategoryCourses'
 import VideoPlayer from './pages/VideoPlayer'
 import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/Admin'
@@ -23,21 +24,21 @@ function PrivateRoute({ children }) {
 }
 
 
-// Redirects to /courses if not an admin
+// Redirects to / if not an admin
 function AdminRoute({ children }) {
   const { user, isAdmin, loading } = useAuth()
   if (loading) return null
   if (!user) return <Navigate to="/login" replace />
-  if (!isAdmin) return <Navigate to="/courses" replace />
+  if (!isAdmin) return <Navigate to="/" replace />
   return children
 }
 
-// Redirects to /courses if not an educator
+// Redirects to / if not an educator
 function EducatorRoute({ children }) {
   const { user, isEducator, loading } = useAuth()
   if (loading) return null
   if (!user) return <Navigate to="/login" replace />
-  if (!isEducator) return <Navigate to="/courses" replace />
+  if (!isEducator) return <Navigate to="/" replace />
   return children
 }
 
@@ -53,6 +54,9 @@ function AppRoutes() {
 
         <Route path="/courses" element={
           <PrivateRoute><Courses /></PrivateRoute>
+        } />
+        <Route path="/courses/category/:categorySlug" element={
+          <PrivateRoute><CategoryCourses /></PrivateRoute>
         } />
         <Route path="/courses/:id" element={
           <PrivateRoute><VideoPlayer /></PrivateRoute>

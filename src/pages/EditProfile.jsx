@@ -51,6 +51,20 @@ export default function EditProfile() {
     )
   }
 
+  if (user.role === 'admin' || user.role === 'educator') {
+    return (
+      <div className="page theme-profile min-h-screen border-t border-border bg-bg">
+        <div className="container max-w-2xl pb-8 pt-20 text-center fade-up mt-10">
+          <div className="alert alert-info border border-blue-200 bg-blue-50 p-8 shadow-sm rounded-2xl">
+            <h2 className="text-2xl font-extrabold font-heading mb-2 text-blue-900">System Account</h2>
+            <p className="text-blue-800">You are securely logged in as a system <strong className="capitalize">{user.role}</strong>. Editing profile details is disabled for static administrative accounts.</p>
+            <button className="btn bg-blue-600 hover:bg-blue-700 text-white mt-8 tracking-widest uppercase font-bold text-xs shadow-md border-none" onClick={() => navigate(-1)}>Go Back</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const setField = (key) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -188,29 +202,31 @@ export default function EditProfile() {
               </div>
             </div>
 
-            <button className="btn btn-primary w-full" type="submit" disabled={saving}>
-              {saving ? 'Saving...' : 'Save Profile'}
-            </button>
-
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2">
+              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2 cursor-pointer hover:border-border2 transition-colors">
                 <input
                   type="checkbox"
+                  className="accent-accent"
                   checked={form.usesExtraResources}
                   onChange={setField('usesExtraResources')}
                 />
                 Uses extra resources
               </label>
 
-              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2">
+              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2 cursor-pointer hover:border-border2 transition-colors">
                 <input
                   type="checkbox"
+                  className="accent-accent"
                   checked={form.extracurricular}
                   onChange={setField('extracurricular')}
                 />
                 Participates in extracurricular activities
               </label>
             </div>
+
+            <button className="btn btn-primary w-full mt-2" type="submit" disabled={saving}>
+              {saving ? 'Saving...' : 'Save Profile'}
+            </button>
           </form>
         </div>
       </div>

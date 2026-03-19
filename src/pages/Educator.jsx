@@ -37,7 +37,7 @@ export default function EducatorDashboard() {
   ]
 
   return (
-    <div className="page border-t border-border bg-bg">
+    <div className="page theme-dashboard">
       <div className="container py-12">
         <div className="page-header mb-10 text-center">
           <h1 className="page-title fade-up text-3xl font-extrabold font-heading text-text">Educator Dashboard</h1>

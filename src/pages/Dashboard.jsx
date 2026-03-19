@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { triggerPredict, getResults } from '../api/predict'
+import { getMyFeedback } from '../api/feedback'
 import { useAuth } from '../context/AuthContext'
 import PredictionBadge from '../components/PredictionBadge'
 import SuggestionCard from '../components/SuggestionCard'
@@ -10,19 +11,28 @@ export default function Dashboard() {
 
   const [latest, setLatest] = useState(null)
   const [history, setHistory] = useState([])
+  const [watchStats, setWatchStats] = useState([])
   const [loading, setLoading] = useState(true)
   const [predicting, setPredicting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
-    getResults()
-      .then((r) => {
-        const data = r.data
+    Promise.all([getResults(), getMyFeedback()])
+      .then(([res1, res2]) => {
+        const data = res1.data
         if (data.length > 0) setLatest(data[0])
         setHistory(data.slice(1))
+
+        const feedbacks = res2.data || []
+        const aggregated = feedbacks.reduce((acc, f) => {
+          if (!f.subjectName) return acc;
+          acc[f.subjectName] = (acc[f.subjectName] || 0) + (f.watchMinutes || 0)
+          return acc
+        }, {})
+        setWatchStats(Object.entries(aggregated).map(([name, mins]) => ({ name, mins })))
       })
-      .catch(() => setError('Failed to load results.'))
+      .catch(() => setError('Failed to load dashboard data.'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -64,6 +74,20 @@ export default function Dashboard() {
 
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}
+
+        {watchStats.length > 0 && (
+          <div className="fade-up-1 mb-10">
+            <h2 className="mb-4 font-heading text-lg font-bold">Watch Time by Subject</h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {watchStats.map((stat, i) => (
+                <div key={i} className="card p-4 flex flex-col justify-between">
+                  <div className="text-sm font-medium mb-1">{stat.name}</div>
+                  <div className="text-2xl font-bold text-accent">{stat.mins} <span className="text-xs font-normal text-text3">mins</span></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {!latest ? (
           <div className="card fade-up py-14 text-center">
@@ -107,6 +131,7 @@ export default function Dashboard() {
                 {latest.state === 'critical' && <p>This is a <strong className="text-red-400">critical state</strong>. Seek mentor support and restart with easy topics.</p>}
               </div>
             </div>
+
 
             {history.length > 0 && (
               <div className="fade-up-4">

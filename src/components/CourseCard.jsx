@@ -125,12 +125,19 @@ export default function CourseCard({ course, index = 0 }) {
       </div>
 
       {/* Bottom Half: Details */}
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="mb-2.5 font-heading text-lg font-bold text-text group-hover:text-accent transition-colors">
-          {course.shortName} - Core Curriculum
-        </h3>
-        
-
+      <div className="flex flex-1 flex-col justify-between p-6">
+        <div>
+          <h3 className="mb-2 font-heading text-[15px] font-bold text-text group-hover:text-accent transition-colors">
+            {course.name}
+          </h3>
+          {course.description && (
+            <p className="text-[12px] leading-relaxed text-text2 line-clamp-2 mb-3">{course.description}</p>
+          )}
+        </div>
+        <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent group-hover:gap-2.5 transition-all">
+          Start Learning
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </span>
       </div>
     </div>
   )

@@ -15,6 +15,7 @@ export default function VideoPlayer() {
   const [showFeedback, setShowFeedback] = useState(false)
   const [watchData, setWatchData] = useState(null)
   const [completedVideos, setCompleted] = useState(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     getCourseById(id)
@@ -75,8 +76,10 @@ export default function VideoPlayer() {
       )}
 
       <div className="container pb-16 pt-6">
-        <div className="mb-6 flex items-center gap-2 text-sm text-text2">
-          <Link to="/courses" className="text-text3 hover:text-text">Courses</Link>
+        <div className="mb-6 flex items-center gap-3 text-sm text-text2">
+          <Link to={`/courses/category/${course.category?.toLowerCase().replace(/\s+/g, '-')}`} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg2 px-3 py-1.5 text-xs font-medium text-text2 transition hover:bg-bg3 hover:text-text">
+            <span className="text-base leading-none">&larr;</span> Back to {course.category || 'Subjects'}
+          </Link>
           <span className="text-text3">/</span>
           <span>{course.name}</span>
         </div>
@@ -117,28 +120,43 @@ export default function VideoPlayer() {
             )}
           </div>
 
-          <div className="card p-4">
-            <h3 className="mb-3.5 border-b border-border pb-3 font-heading text-sm font-bold">Playlist - {totalVideos} videos</h3>
-            <div className="flex flex-col gap-1">
-              {course.videos?.map((v, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveVideo(i)}
-                  className={`flex items-start gap-2.5 rounded-lg border-l-2 px-2.5 py-2.5 text-left transition ${activeVideo === i ? 'border-l-accent bg-accent/10' : 'border-l-transparent hover:bg-bg3'}`}
-                >
-                  <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-xs font-bold ${completedVideos.has(i)
-                    ? 'bg-green-500/20 text-green-300'
-                    : activeVideo === i
-                      ? 'bg-accent/20 text-accent'
-                      : 'bg-surface text-text3'}`}>
-                    {completedVideos.has(i) ? 'OK' : i + 1}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className={`truncate text-xs font-medium ${activeVideo === i ? 'text-accent' : 'text-text'}`}>{v.title}</div>
-                    {v.duration && <div className="mt-0.5 text-[11px] text-text3">{v.duration} min</div>}
-                  </div>
-                </button>
-              ))}
+          <div className="card p-4 h-fit">
+            <h3 className="mb-3.5 border-b border-border pb-3 font-heading text-sm font-bold shadow-sm">Playlist - {totalVideos} videos</h3>
+            <div className="mb-3">
+              <input
+                type="text"
+                placeholder="Search video topic..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-border bg-bg2 px-3 py-2 text-sm text-text outline-none transition focus:border-accent focus:ring-1 focus:ring-accent"
+              />
+            </div>
+            <div className="flex flex-col gap-1 max-h-[450px] lg:max-h-[600px] overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin' }}>
+              {(course.videos || [])
+                .map((v, index) => ({ ...v, originalIndex: index }))
+                .filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase().trim()))
+                .map((v) => {
+                  const i = v.originalIndex;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setActiveVideo(i)}
+                      className={`flex items-start gap-2.5 rounded-lg border-l-2 px-2.5 py-2.5 text-left transition ${activeVideo === i ? 'border-l-accent bg-accent/10 shadow-sm' : 'border-l-transparent hover:bg-bg3'}`}
+                    >
+                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-xs font-bold ${completedVideos.has(i)
+                        ? 'bg-green-500/20 text-green-300'
+                        : activeVideo === i
+                          ? 'bg-accent/20 text-accent'
+                          : 'bg-surface text-text3'}`}>
+                        {completedVideos.has(i) ? 'OK' : i + 1}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className={`truncate text-xs font-medium ${activeVideo === i ? 'text-accent' : 'text-text'}`}>{v.title}</div>
+                        {v.duration && <div className="mt-0.5 text-[11px] text-text3">{v.duration} min</div>}
+                      </div>
+                    </button>
+                  );
+              })}
             </div>
           </div>
         </div>

@@ -98,7 +98,7 @@ export default function ChangePassword() {
         </button>
 
         <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 text-blue-600 shadow-sm">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 text-blue-600 shadow-sm dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-400">
             <SecurityBadgeIcon />
           </div>
           <div>

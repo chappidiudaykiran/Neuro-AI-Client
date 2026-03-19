@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { submitFeedback } from '../api/feedback'
 
 const STARS = [1, 2, 3, 4, 5]
@@ -15,8 +15,8 @@ function StarRating({ label, value, onChange }) {
             onMouseEnter={() => setHover(s)}
             onMouseLeave={() => setHover(0)}
             onClick={() => onChange(s)}
-            className={`text-2xl transition duration-150 ${s <= (hover || value) ? 'scale-110 opacity-100' : 'opacity-25'}`}>
-            *
+            className={`text-2xl transition duration-150 ${s <= (hover || value) ? 'scale-110 text-amber-400' : 'text-text3 opacity-40'}`}>
+            ★
           </button>
         ))}
       </div>
@@ -30,6 +30,7 @@ export default function FeedbackModal({ subject, watchData, onClose, onSubmitted
     stressFelt: 0,
     confidenceRating: 0,
     enjoyedSubject: null,
+    feedbackText: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -52,6 +53,7 @@ export default function FeedbackModal({ subject, watchData, onClose, onSubmitted
         stressFelt:       form.stressFelt,
         confidenceRating: form.confidenceRating,
         enjoyedSubject:   form.enjoyedSubject,
+        feedbackText:     form.feedbackText,
         watchMinutes:     watchData.watchMinutes,
         completionPct:    watchData.completionPct,
       })
@@ -95,6 +97,17 @@ export default function FeedbackModal({ subject, watchData, onClose, onSubmitted
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="mb-6">
+          <label className="mb-2.5 block text-[13px] text-text2">Any feedback or comments? (Optional)</label>
+          <textarea
+            className="w-full resize-none rounded-xl border border-border bg-bg3 p-3 text-sm text-text outline-none focus:border-accent"
+            rows="3"
+            placeholder="What could be improved? How did you find the explanations?"
+            value={form.feedbackText}
+            onChange={(e) => set('feedbackText', e.target.value)}
+          ></textarea>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
