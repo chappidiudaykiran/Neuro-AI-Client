@@ -1,14 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { getCourses } from '../api/courses'
+import { getSlug } from './CategoryCard'
 import ecurveLogo from '../assets/ecurve_logo_transparent.png'
 import ecurveLogoDark from '../assets/ecurve_logo_darkmode.png'
 import adminAvatar from '../assets/admin.png'
 import educatorAvatar from '../assets/educator.jpg'
 
-const SEARCH_HINTS = ['Data Structures', 'Python', 'GATE Prep', 'Machine Learning', 'DBMS', 'Operating Systems']
+const CATEGORIES = ['GATE Prep', 'Programming', 'CS Core']
 
 function NavbarSearch({ navigate }) {
+  const [courses, setCourses] = useState([])
+
+  useEffect(() => {
+    getCourses().then(r => setCourses(r.data)).catch(() => {})
+  }, [])
+
+  const handleSearch = (value) => {
+    const q = value.trim().toLowerCase()
+    if (!q) return
+    // Match category
+    const catMatch = CATEGORIES.find(c => c.toLowerCase().includes(q) || q.includes(c.toLowerCase()))
+    if (catMatch) { navigate(`/courses/category/${getSlug(catMatch)}`); return }
+    // Match subject/course name
+    const courseMatch = courses.find(c => c.name?.toLowerCase().includes(q) || q.includes(c.name?.toLowerCase()))
+    if (courseMatch) { navigate(`/courses/${courseMatch._id}`); return }
+    // Fallback
+    navigate('/courses')
+  }
+
   return (
     <div className="hidden md:flex items-center ml-4 max-w-[200px]">
       <div className="flex items-center w-full rounded-lg border border-border bg-bg3 px-3 py-1.5 transition-all focus-within:border-accent focus-within:bg-bg2">
@@ -17,7 +38,7 @@ function NavbarSearch({ navigate }) {
           type="text"
           placeholder="Search courses…"
           className="ml-2 w-full bg-transparent text-[13px] text-text placeholder:text-text3 outline-none"
-          onKeyDown={(e) => { if (e.key === 'Enter' && e.target.value.trim()) navigate('/courses') }}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(e.target.value) }}
         />
       </div>
     </div>

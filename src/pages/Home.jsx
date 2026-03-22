@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { getCategoriesSummary } from '../api/courses'
+import { getCategoriesSummary, getCourses } from '../api/courses'
 import CategoryCard from '../components/CategoryCard'
 import { getSlug } from '../components/CategoryCard'
 
 const SUBJECTS = ['Data Structures', 'Machine Learning', 'Operating Systems', 'GATE Prep', 'Python', 'DBMS', 'Computer Networks', 'C Programming']
+const CATEGORIES = ['GATE Prep', 'Programming', 'CS Core']
 
 export default function Home() {
   const { user } = useAuth()
@@ -14,12 +15,17 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(null)
   const [wordIndex, setWordIndex] = useState(0)
+  const [allCourses, setAllCourses] = useState([])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setWordIndex(prev => (prev + 1) % SUBJECTS.length)
     }, 2500)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    getCourses().then(r => setAllCourses(r.data)).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -50,8 +56,11 @@ export default function Home() {
     <div className="page bg-bg text-text selection:bg-accent/30 selection:text-accent">
       
       {/* ====== Hero ====== */}
-      <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden border-b border-border">
-        {/* Background */}
+      <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden border-b border-border"
+        style={{
+          background: `radial-gradient(ellipse at 50% 0%, rgba(135, 206, 250, 0.35), transparent 70%), linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%)`
+        }}>
+        {/* Background decorative blurs */}
         <div className="absolute top-0 right-0 -m-32 h-96 w-96 rounded-full bg-accent/20 blur-[100px]" />
         <div className="absolute bottom-0 left-0 -m-32 h-[30rem] w-[30rem] rounded-full bg-blue-600/10 blur-[120px]" />
         <div className="absolute inset-0 opacity-[0.03]"
@@ -79,7 +88,7 @@ export default function Home() {
 
           {/* Search Bar */}
           <div className="fade-up-3 mx-auto mb-10 max-w-3xl">
-            <div className="flex items-center rounded-2xl border border-border shadow-lg shadow-black/5 transition-all focus-within:border-accent focus-within:shadow-accent/10 focus-within:shadow-xl">
+            <div className="flex items-center rounded-2xl border border-border2 bg-bg2/60 shadow-lg shadow-black/5 backdrop-blur-sm transition-all focus-within:border-accent focus-within:shadow-accent/10 focus-within:shadow-xl">
               <div className="pl-5 text-text3">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
               </div>
@@ -87,7 +96,17 @@ export default function Home() {
                 type="text"
                 placeholder={SUBJECTS[wordIndex]}
                 className="flex-1 bg-transparent px-4 py-4 text-[15px] text-text placeholder:text-text3 outline-none"
-                onKeyDown={(e) => { if (e.key === 'Enter' && e.target.value.trim()) navigate('/courses') }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const q = e.target.value.trim().toLowerCase()
+                    if (!q) return
+                    const catMatch = CATEGORIES.find(c => c.toLowerCase().includes(q) || q.includes(c.toLowerCase()))
+                    if (catMatch) { navigate(`/courses/category/${getSlug(catMatch)}`); return }
+                    const courseMatch = allCourses.find(c => c.name?.toLowerCase().includes(q) || q.includes(c.name?.toLowerCase()))
+                    if (courseMatch) { navigate(`/courses/${courseMatch._id}`); return }
+                    navigate('/courses')
+                  }
+                }}
               />
             </div>
           </div>

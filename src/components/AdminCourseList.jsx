@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getCourses, deleteSubject } from '../api/courses'
 
-export default function AdminCourseList({ onEdit, refreshTrigger }) {
+export default function AdminCourseList({ refreshTrigger, onRefresh }) {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -97,7 +99,7 @@ export default function AdminCourseList({ onEdit, refreshTrigger }) {
                             <span className="text-xs font-bold bg-bg3 text-text2 rounded-lg py-1.5 px-3 border border-border shadow-sm">{c.videos?.length || 0} Lessons</span>
                           </td>
                           <td className="px-5 py-5 text-right space-x-3">
-                            <button onClick={() => onEdit(c)} className="btn bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white border border-blue-200 dark:border-blue-500/30 px-5 py-2 text-[11px] shadow-sm transition-all uppercase font-bold tracking-widest rounded-lg">Edit</button>
+                            <button onClick={() => navigate(`/admin/edit/${c._id}`)} className="btn bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white border border-blue-200 dark:border-blue-500/30 px-5 py-2 text-[11px] shadow-sm transition-all uppercase font-bold tracking-widest rounded-lg">Edit</button>
                             <button onClick={() => handleDelete(c._id, c.name)} className="btn bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white border border-red-200 dark:border-red-500/30 px-5 py-2 text-[11px] shadow-sm transition-all uppercase font-bold tracking-widest rounded-lg">Drop</button>
                           </td>
                         </tr>

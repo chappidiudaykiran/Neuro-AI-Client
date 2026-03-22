@@ -10,6 +10,8 @@ import CategoryCourses from './pages/CategoryCourses'
 import VideoPlayer from './pages/VideoPlayer'
 import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/Admin'
+import AdminAddSubject from './pages/AdminAddSubject'
+import AdminEditSubject from './pages/AdminEditSubject'
 import EducatorDashboard from './pages/Educator'
 import ChangePassword from './pages/ChangePassword'
 import EditProfile from './pages/EditProfile'
@@ -81,6 +83,12 @@ function AppRoutes() {
         } />
         <Route path="/admin" element={
           <AdminRoute><AdminDashboard /></AdminRoute>
+        } />
+        <Route path="/admin/add" element={
+          <AdminRoute><AdminAddSubject /></AdminRoute>
+        } />
+        <Route path="/admin/edit/:id" element={
+          <AdminRoute><AdminEditSubject /></AdminRoute>
         } />
         <Route path="/educator" element={
           <EducatorRoute><EducatorDashboard /></EducatorRoute>
