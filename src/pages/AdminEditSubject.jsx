@@ -46,12 +46,17 @@ export default function AdminEditSubject() {
   const handleFieldChange = (key) => (e) => setForm(p => ({ ...p, [key]: e.target.value }))
 
   const handleVideoChange = (index, key, value) => {
-    const newVideos = [...videos]
-    newVideos[index][key] = value
-    setVideos(newVideos)
+    setVideos(prev => {
+      const next = [...prev]
+      next[index] = { ...next[index], [key]: value }
+      return next
+    })
   }
 
-  const addVideoField = () => setVideos([...videos, { title: '', youtubeId: '', duration: '' }])
+  const addVideoField = (e) => {
+    e.preventDefault()
+    setVideos(prev => [...prev, { title: '', youtubeId: '', duration: '' }])
+  }
 
   const removeVideoField = (index) => {
     if (videos.length === 1) return
@@ -137,7 +142,7 @@ export default function AdminEditSubject() {
                 key={cat}
                 type="button"
                 onClick={() => handleTabClick(cat)}
-                className={`flex-1 py-3.5 px-2 text-sm font-bold text-center transition-colors border-r last:border-r-0 border-border/50 ${activeCategory === cat ? 'bg-blue-600 text-white' : 'text-text2 hover:bg-bg3 hover:text-text'}`}
+                className={`flex-1 py-3.5 px-2 text-sm font-bold text-center transition-colors border-r last:border-r-0 border-border ${activeCategory === cat ? 'bg-accent text-white' : 'text-text2 hover:bg-bg3 hover:text-text'}`}
               >
                 {cat}
               </button>
@@ -162,7 +167,7 @@ export default function AdminEditSubject() {
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <div className="form-group">
                 <label className="label">Selected Category</label>
-                <div className="input bg-bg2 text-text2 flex items-center border border-border/50 opacity-70 pointer-events-none select-none">{activeCategory}</div>
+                <div className="input bg-bg2 text-text2 flex items-center border border-border opacity-70 pointer-events-none select-none">{activeCategory}</div>
               </div>
               <div className="form-group">
                 <label className="label">Description</label>

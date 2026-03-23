@@ -8,12 +8,6 @@ const genderOptions = [
   { value: 0, label: 'Female' },
 ]
 
-const learningStyleOptions = [
-  { value: 0, label: 'Visual' },
-  { value: 1, label: 'Auditory' },
-  { value: 2, label: 'Kinesthetic' },
-]
-
 export default function EditProfile() {
   const navigate = useNavigate()
   const { user, updateUser, loading } = useAuth()
@@ -24,10 +18,6 @@ export default function EditProfile() {
     name: user?.name || '',
     age: Number(user?.age ?? 20),
     gender: Number(user?.gender ?? 1),
-    learningStyle: Number(user?.learningStyle ?? 0),
-    attendancePercent: Number(user?.attendancePercent ?? 80),
-    usesExtraResources: Boolean(user?.usesExtraResources),
-    extracurricular: Boolean(user?.extracurricular),
     photo: user?.photo || '',
   }), [user])
   const [form, setForm] = useState(initialForm)
@@ -97,8 +87,6 @@ export default function EditProfile() {
         ...form,
         age: Number(form.age),
         gender: Number(form.gender),
-        learningStyle: Number(form.learningStyle),
-        attendancePercent: Number(form.attendancePercent),
       }
       const res = await updateProfile(payload)
       updateUser(res.data.user)
@@ -169,21 +157,6 @@ export default function EditProfile() {
               </div>
 
               <div className="form-group mb-0">
-                <label className="label">Attendance (%)</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  className="input"
-                  value={form.attendancePercent}
-                  onChange={setField('attendancePercent')}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="form-group mb-0">
                 <label className="label">Gender</label>
                 <select className="input" value={form.gender} onChange={setField('gender')}>
                   {genderOptions.map((opt) => (
@@ -191,37 +164,6 @@ export default function EditProfile() {
                   ))}
                 </select>
               </div>
-
-              <div className="form-group mb-0">
-                <label className="label">Learning Style</label>
-                <select className="input" value={form.learningStyle} onChange={setField('learningStyle')}>
-                  {learningStyleOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2 cursor-pointer hover:border-border2 transition-colors">
-                <input
-                  type="checkbox"
-                  className="accent-accent"
-                  checked={form.usesExtraResources}
-                  onChange={setField('usesExtraResources')}
-                />
-                Uses extra resources
-              </label>
-
-              <label className="flex items-center gap-2 rounded-xl border border-border bg-bg2 px-3 py-2 text-sm text-text2 cursor-pointer hover:border-border2 transition-colors">
-                <input
-                  type="checkbox"
-                  className="accent-accent"
-                  checked={form.extracurricular}
-                  onChange={setField('extracurricular')}
-                />
-                Participates in extracurricular activities
-              </label>
             </div>
 
             <button className="btn btn-primary w-full mt-2" type="submit" disabled={saving}>

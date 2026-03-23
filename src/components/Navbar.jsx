@@ -190,7 +190,7 @@ export default function Navbar() {
 
               {menuOpen && (
                 <div className="absolute right-0 z-50 mt-2 w-52 rounded-xl border border-border bg-bg2 p-1.5 shadow-lg shadow-black/10">
-                  <div className="sm:hidden px-3 py-2 border-b border-border/50 mb-1">
+                  <div className="sm:hidden px-3 py-2 border-b border-border mb-1">
                     <div className="text-[13px] font-bold uppercase text-text">
                       {user.role === 'admin' ? 'Admin' : user.role === 'educator' ? 'Educator' : user.name}
                     </div>
@@ -223,11 +223,9 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <NavLink to="/login" className="btn btn-ghost text-[13px]">Login</NavLink>
-              <NavLink to="/register" className="btn btn-primary px-[18px] py-[7px] text-[13px]">
-                Sign Up
-              </NavLink>
+            <div className="flex items-center gap-3">
+              <NavLink to="/login" className={({isActive}) => `px-5 py-2 text-[13px] font-extrabold rounded-lg transition-all ${isActive ? 'bg-accent text-white shadow-md' : 'text-text2 hover:text-accent hover:bg-accent/5'}`}>Login</NavLink>
+              <NavLink to="/register" className={({isActive}) => `px-5 py-2 text-[13px] font-extrabold rounded-lg transition-all ${isActive ? 'bg-accent text-white shadow-md' : 'text-text2 hover:text-accent hover:bg-accent/5'}`}>Sign Up</NavLink>
             </div>
           )}
         </div>

@@ -12,6 +12,7 @@ export default function Dashboard() {
   const [latest, setLatest] = useState(null)
   const [history, setHistory] = useState([])
   const [watchStats, setWatchStats] = useState([])
+  const [subjectInsights, setSubjectInsights] = useState([])
   const [loading, setLoading] = useState(true)
   const [predicting, setPredicting] = useState(false)
   const [error, setError] = useState('')
@@ -25,12 +26,42 @@ export default function Dashboard() {
         setHistory(data.slice(1))
 
         const feedbacks = res2.data || []
-        const aggregated = feedbacks.reduce((acc, f) => {
+        
+        // Aggregating for watch time (existing)
+        const aggregatedTime = feedbacks.reduce((acc, f) => {
           if (!f.subjectName) return acc;
           acc[f.subjectName] = (acc[f.subjectName] || 0) + (f.watchMinutes || 0)
           return acc
         }, {})
-        setWatchStats(Object.entries(aggregated).map(([name, mins]) => ({ name, mins })))
+        setWatchStats(Object.entries(aggregatedTime).map(([name, mins]) => ({ name, mins })))
+
+        // Aggregating for insights (ML Input Preview) - SUBJECT WISE
+        if (feedbacks.length > 0) {
+          const subjectMap = feedbacks.reduce((acc, f) => {
+            const sName = f.subjectName || 'Unknown Subject'
+            if (!acc[sName]) acc[sName] = { diff: 0, stress: 0, conf: 0, comp: 0, happy: 0, count: 0 }
+            
+            acc[sName].diff += (f.difficultyRating || 0)
+            acc[sName].stress += (f.stressFelt || 0)
+            acc[sName].conf += (f.confidenceRating || 0)
+            acc[sName].comp += (f.completionPct || 0)
+            if (f.enjoyedSubject) acc[sName].happy++
+            acc[sName].count++
+            return acc
+          }, {})
+
+          const insights = Object.entries(subjectMap).map(([name, sums]) => ({
+            name,
+            avgDiff: (sums.diff / sums.count).toFixed(1),
+            avgStress: (sums.stress / sums.count).toFixed(1),
+            avgConf: (sums.conf / sums.count).toFixed(1),
+            avgComp: (sums.comp / sums.count).toFixed(0),
+            enjoymentPct: ((sums.happy / sums.count) * 100).toFixed(0),
+            totalEntries: sums.count
+          }))
+          
+          setSubjectInsights(insights)
+        }
       })
       .catch(() => setError('Failed to load dashboard data.'))
       .finally(() => setLoading(false))
@@ -80,14 +111,53 @@ export default function Dashboard() {
             <h2 className="mb-4 font-heading text-lg font-bold">Watch Time by Subject</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {watchStats.map((stat, i) => (
-                <div key={i} className="card p-4 flex flex-col justify-between">
-                  <div className="text-sm font-medium mb-1">{stat.name}</div>
-                  <div className="text-2xl font-bold text-accent">{stat.mins} <span className="text-xs font-normal text-text3">mins</span></div>
+                <div key={i} className="card p-4 flex flex-col justify-between border-l-4 border-l-accent bg-bg3/50 dark:bg-bg2/40">
+                  <div className="text-xs font-semibold text-text3 uppercase tracking-wider mb-1">{stat.name}</div>
+                  <div className="text-2xl font-bold text-text">{stat.mins} <span className="text-xs font-normal text-text3">mins</span></div>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        {subjectInsights.length > 0 && (
+          <div className="fade-up-2 mb-10">
+            <h2 className="mb-4 font-heading text-lg font-bold">Subject Feedback Insights <span className="text-xs font-normal text-text3 ml-2">(ML Input Data)</span></h2>
+            <div className="flex flex-col gap-4">
+              {subjectInsights.map((insight, idx) => (
+                <div key={idx} className="card p-4 border-border bg-bg3/50 dark:bg-surface/30">
+                  <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
+                    <span className="font-bold text-accent">{insight.name}</span>
+                    <span className="text-[10px] text-text3 uppercase tracking-wider">{insight.totalEntries} entries</span>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div className="text-center md:border-r border-border last:border-0">
+                      <div className="text-[9px] text-text3 uppercase mb-0.5">Difficulty</div>
+                      <div className="text-base font-bold text-amber-500">{insight.avgDiff}</div>
+                    </div>
+                    <div className="text-center md:border-r border-border last:border-0">
+                      <div className="text-[9px] text-text3 uppercase mb-0.5">Stress</div>
+                      <div className="text-base font-bold text-red-500">{insight.avgStress}</div>
+                    </div>
+                    <div className="text-center md:border-r border-border last:border-0">
+                      <div className="text-[9px] text-text3 uppercase mb-0.5">Confidence</div>
+                      <div className="text-base font-bold text-green-600">{insight.avgConf}</div>
+                    </div>
+                    <div className="text-center md:border-r border-border last:border-0">
+                      <div className="text-[9px] text-text3 uppercase mb-0.5">Completion</div>
+                      <div className="text-base font-bold text-blue-500">{insight.avgComp}%</div>
+                    </div>
+                    <div className="text-center col-span-2 md:col-span-1">
+                      <div className="text-[9px] text-text3 uppercase mb-0.5">Enjoyment</div>
+                      <div className="text-base font-bold text-pink-400">{insight.enjoymentPct}%</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
 
         {!latest ? (
           <div className="card fade-up py-14 text-center">
