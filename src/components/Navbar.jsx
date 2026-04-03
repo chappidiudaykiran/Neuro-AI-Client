@@ -5,8 +5,8 @@ import { getCourses } from '../api/courses'
 import { getSlug } from './CategoryCard'
 import ecurveLogo from '../assets/ecurve_logo_transparent.png'
 import ecurveLogoDark from '../assets/ecurve_logo_darkmode.png'
-import adminAvatar from '../assets/admin.png'
 import educatorAvatar from '../assets/educator.jpg'
+import userIcon from '../assets/user icon.png'
 
 const CATEGORIES = ['GATE Prep', 'Programming', 'CS Core']
 
@@ -46,7 +46,7 @@ function NavbarSearch({ navigate }) {
 }
 
 export default function Navbar() {
-  const { user, logout, isAdmin, isEducator } = useAuth()
+  const { user, logout, isEducator } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -121,12 +121,17 @@ export default function Navbar() {
               <NavLink to="/courses" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
                 Courses
               </NavLink>
-              <NavLink to="/dashboard" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-                Dashboard
+              {!isEducator && (
+                <NavLink to="/dashboard" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+                  Dashboard
+                </NavLink>
+              )}
+              <NavLink to={isEducator ? '/educator/assignments' : '/assignments'} className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+                Assignments
               </NavLink>
-              {isAdmin && (
-                <NavLink to="/admin" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-                  Content Admin
+              {isEducator && (
+                <NavLink to="/educator/subjects" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+                  Manage Subjects
                 </NavLink>
               )}
               {isEducator && (
@@ -171,18 +176,14 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   <span className="hidden sm:flex flex-col leading-tight text-right mr-1">
                     <span className="text-[13px] font-bold uppercase text-text">
-                      {user.role === 'admin' ? 'Admin' : user.role === 'educator' ? 'Educator' : user.name}
+                      {user.role === 'educator' ? 'Educator' : user.name}
                     </span>
                     <span className="mt-1 text-[10px] capitalize text-text3">{roleLabel}</span>
                   </span>
                   {user.photo ? (
                     <img src={user.photo} alt="User" className="h-8 w-8 rounded-full object-cover border border-border" />
-                  ) : isAdmin ? (
-                    <img src={adminAvatar} alt="Admin" className="h-8 w-8 rounded-full object-cover border border-border" />
-                  ) : isEducator ? (
-                    <img src={educatorAvatar} alt="Educator" className="h-8 w-8 rounded-full object-cover border border-border" />
                   ) : (
-                    <span className="inline-block h-8 w-8 rounded-full bg-bg3 border border-border" />
+                    <img src={isEducator ? educatorAvatar : userIcon} alt="User" className="h-8 w-8 rounded-full object-cover border border-border" />
                   )}
                 </span>
                 <span className="text-text3 text-xs">▾</span>
@@ -192,7 +193,7 @@ export default function Navbar() {
                 <div className="absolute right-0 z-50 mt-2 w-52 rounded-xl border border-border bg-bg2 p-1.5 shadow-lg shadow-black/10">
                   <div className="sm:hidden px-3 py-2 border-b border-border mb-1">
                     <div className="text-[13px] font-bold uppercase text-text">
-                      {user.role === 'admin' ? 'Admin' : user.role === 'educator' ? 'Educator' : user.name}
+                      {user.role === 'educator' ? 'Educator' : user.name}
                     </div>
                     <div className="text-[11px] capitalize text-text3">{roleLabel}</div>
                   </div>
@@ -240,12 +241,17 @@ export default function Navbar() {
           <NavLink to="/courses" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
             Courses
           </NavLink>
-          <NavLink to="/dashboard" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
-            Dashboard
+          {!isEducator && (
+            <NavLink to="/dashboard" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
+              Dashboard
+            </NavLink>
+          )}
+          <NavLink to={isEducator ? '/educator/assignments' : '/assignments'} className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
+            Assignments
           </NavLink>
-          {isAdmin && (
-            <NavLink to="/admin" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
-              Content Admin
+          {isEducator && (
+            <NavLink to="/educator/subjects" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
+              Manage Subjects
             </NavLink>
           )}
           {isEducator && (

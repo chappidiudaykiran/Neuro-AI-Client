@@ -24,7 +24,7 @@ export default function EducatorLogin() {
       const isEducatorAccount = res.data.user.role === 'educator'
       
       if (!isEducatorAccount) {
-        setError('This is not an Educator account. Please use Student or Admin login.')
+        setError('This is not an Educator account. Please use Student login.')
         setLoading(false)
         return
       }

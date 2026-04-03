@@ -18,6 +18,7 @@ export default function EditProfile() {
     name: user?.name || '',
     age: Number(user?.age ?? 20),
     gender: Number(user?.gender ?? 1),
+    learningStyle: Number(user?.learningStyle ?? 0),
     photo: user?.photo || '',
   }), [user])
   const [form, setForm] = useState(initialForm)
@@ -41,13 +42,13 @@ export default function EditProfile() {
     )
   }
 
-  if (user.role === 'admin' || user.role === 'educator') {
+  if (user.role === 'educator') {
     return (
       <div className="page theme-profile min-h-screen border-t border-border bg-bg">
         <div className="container max-w-2xl pb-8 pt-20 text-center fade-up mt-10">
           <div className="alert alert-info border border-blue-200 bg-blue-50 p-8 shadow-sm rounded-2xl">
             <h2 className="text-2xl font-extrabold font-heading mb-2 text-blue-900">System Account</h2>
-            <p className="text-blue-800">You are securely logged in as a system <strong className="capitalize">{user.role}</strong>. Editing profile details is disabled for static administrative accounts.</p>
+            <p className="text-blue-800">You are securely logged in as an <strong>Educator</strong>. Editing profile details is disabled for educator accounts.</p>
             <button className="btn bg-blue-600 hover:bg-blue-700 text-white mt-8 tracking-widest uppercase font-bold text-xs shadow-md border-none" onClick={() => navigate(-1)}>Go Back</button>
           </div>
         </div>
@@ -87,6 +88,7 @@ export default function EditProfile() {
         ...form,
         age: Number(form.age),
         gender: Number(form.gender),
+        learningStyle: Number(form.learningStyle),
       }
       const res = await updateProfile(payload)
       updateUser(res.data.user)
@@ -142,13 +144,13 @@ export default function EditProfile() {
               <input className="input" value={user?.email || ''} disabled />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="form-group mb-0">
                 <label className="label">Age</label>
                 <input
                   type="number"
-                  min="1"
-                  max="100"
+                  min="18"
+                  max="30"
                   className="input"
                   value={form.age}
                   onChange={setField('age')}
@@ -162,6 +164,15 @@ export default function EditProfile() {
                   {genderOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
+                </select>
+              </div>
+
+              <div className="form-group mb-0">
+                <label className="label">Learning Style</label>
+                <select className="input" value={form.learningStyle} onChange={setField('learningStyle')}>
+                  <option value="0">Visual</option>
+                  <option value="1">Auditory</option>
+                  <option value="2">Kinesthetic</option>
                 </select>
               </div>
             </div>

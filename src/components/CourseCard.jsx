@@ -1,7 +1,21 @@
 import { useNavigate } from 'react-router-dom'
+import { toggleSubject } from '../api/auth'
+import { useAuth } from '../context/AuthContext'
 
 export default function CourseCard({ course, index = 0 }) {
   const navigate = useNavigate()
+  const { user, updateUser } = useAuth()
+  const isEnrolled = user?.selectedSubjects?.includes(course._id)
+
+  const handleToggle = async (e) => {
+    e.stopPropagation()
+    try {
+      const res = await toggleSubject(course._id)
+      updateUser({ selectedSubjects: res.data.selectedSubjects })
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
 
 
@@ -134,10 +148,30 @@ export default function CourseCard({ course, index = 0 }) {
             <p className="text-[12px] leading-relaxed text-text2 line-clamp-2 mb-3">{course.description}</p>
           )}
         </div>
-        <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent group-hover:gap-2.5 transition-all">
-          Start Learning
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </span>
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent group-hover:gap-2.5 transition-all">
+            Start Learning
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </span>
+          <button 
+            onClick={handleToggle} 
+            className={`inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-all duration-300 ${isEnrolled 
+              ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/40 hover:-translate-y-0.5 border-none' 
+              : 'bg-bg3 text-text2 hover:bg-accent hover:text-white border border-border/60 hover:border-transparent shadow-sm'}`}
+          >
+            {isEnrolled ? (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                Enrolled
+              </>
+            ) : (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                Enroll
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   )

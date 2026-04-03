@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react'
-import { getCategoriesSummary } from '../api/courses'
+import { getCategoriesSummary, getMySubjects } from '../api/courses'
 import CategoryCard from '../components/CategoryCard'
+import CourseCard from '../components/CourseCard'
 
 export default function Courses() {
   const [categories, setCategories] = useState([])
+  const [enrolledSubjects, setEnrolledSubjects] = useState([])
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState('')
 
   useEffect(() => {
-    getCategoriesSummary()
-      .then(r => {
+    Promise.all([
+      getCategoriesSummary(),
+      getMySubjects().catch(() => ({ data: [] }))
+    ])
+      .then(([r, enrolledRes]) => {
           const sorted = r.data.sort((a, b) => {
             const order = ['GATE Prep', 'Programming', 'CS Core'];
             const indexA = order.indexOf(a.category);
@@ -18,6 +23,7 @@ export default function Courses() {
             return indexA !== -1 ? -1 : indexB !== -1 ? 1 : a.category.localeCompare(b.category);
           });
           setCategories(sorted);
+          setEnrolledSubjects(enrolledRes.data || []);
       })
       .catch((err) => {
          console.error(err);
@@ -49,14 +55,28 @@ export default function Courses() {
   return (
     <div className="page theme-courses">
       <div className="container">
-        <div className="page-header text-center mb-6 -mt-1 sm:-mt-3">
-          <h1 className="page-title fade-up mb-3 text-4xl sm:text-5xl font-extrabold tracking-tight">Course Library</h1>
-          <p className="page-subtitle fade-up-2 text-lg text-text2 max-w-2xl mx-auto">
-            Choose a learning category pathway below to explore our curated curriculum bundles.
-          </p>
+        <div className="page-header text-center mb-0 -mt-1 sm:-mt-3">
+          <h1 className="page-title fade-up mb-0 text-4xl sm:text-5xl font-extrabold tracking-tight">Course Library</h1>
         </div>
 
+        {/* My Enrolled Subjects */}
+        {!loading && enrolledSubjects.length > 0 && (
+          <div className="fade-up-1 mt-6 mb-10 max-w-6xl mx-auto">
+            <h2 className="mb-4 font-heading text-lg font-bold">My Enrolled Subjects</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {enrolledSubjects.map((c, i) => (
+                <CourseCard key={c._id} course={c} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!loading && enrolledSubjects.length > 0 && (
+          <hr className="border-border max-w-6xl mx-auto mb-8" />
+        )}
+
         {/* Content */}
+        <h2 className="mb-5 font-heading text-lg font-bold max-w-6xl mx-auto">Explore Categories</h2>
         {loading && (
           <div className="loading-center"><div className="spinner" /></div>
         )}

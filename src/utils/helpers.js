@@ -1,7 +1,7 @@
-﻿export const gradeLabel = (g) => ['Fail', 'Pass', 'Merit', 'Distinction'][g] ?? 'â€”'
+export const gradeLabel = (g) => ['Fail', 'Pass', 'Merit', 'Distinction'][g] ?? '—'
 export const gradeColor = (g) => ['#ef4444','#f59e0b','#3b82f6','#22c55e'][g] ?? '#888'
 
-export const stressLabel = (s) => ['Low', 'Medium', 'High'][s] ?? 'â€”'
+export const stressLabel = (s) => ['Low', 'Medium', 'High'][s] ?? '—'
 export const stressColor = (s) => ['#22c55e', '#f59e0b', '#ef4444'][s] ?? '#888'
 export const stressBadge = (s) => ['badge-low', 'badge-medium', 'badge-high'][s] ?? ''
 
@@ -32,12 +32,12 @@ export const tagLabel = (tag) => ({
 })[tag] ?? tag
 
 export const actionIcon = (action) => ({
-  focus_more:  'ðŸ“š',
-  take_break:  'ðŸ˜®â€ðŸ’¨',
-  on_track:    'âœ…',
-  seek_help:   'ðŸ™‹',
-  keep_going:  'ðŸ’ª',
-})[action] ?? 'ðŸ’¡'
+  focus_more:  '📚',
+  take_break:  '🧘‍♂️',
+  on_track:    '✅',
+  seek_help:   '🙋',
+  keep_going:  '💪',
+})[action] ?? '💡'
 
 export const actionColor = (action) => ({
   focus_more:  '#3b82f6',

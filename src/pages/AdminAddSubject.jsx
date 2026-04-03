@@ -72,7 +72,7 @@ export default function AdminAddSubject() {
     try {
       await createSubject({ ...form, videos: processedVideos })
       setSuccess(`${form.name} successfully created!`)
-      setTimeout(() => navigate('/admin'), 1500)
+      setTimeout(() => navigate('/educator/subjects'), 1500)
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create subject.')
     } finally {
@@ -85,9 +85,9 @@ export default function AdminAddSubject() {
       <div className="container py-12">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/admin" className="text-text3 hover:text-accent flex items-center gap-2 font-medium w-fit transition-colors bg-bg2 px-4 py-2 rounded-full border border-border shadow-sm text-sm mb-4">
+          <Link to="/educator/subjects" className="text-text3 hover:text-accent flex items-center gap-2 font-medium w-fit transition-colors bg-bg2 px-4 py-2 rounded-full border border-border shadow-sm text-sm mb-4">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Back to Content Admin
+            Back to Manage Subjects
           </Link>
           <h1 className="page-title text-2xl font-extrabold font-heading text-text">Add New Subject</h1>
           <p className="text-sm text-text2 mt-1">Select a category, fill in the details, and add the YouTube playlist.</p>
@@ -178,7 +178,7 @@ export default function AdminAddSubject() {
             </div>
 
             <div className="flex justify-between items-center pt-4">
-              <Link to="/admin" className="btn bg-bg2 text-text2 hover:text-red-500 px-4 py-2 shadow-sm border border-border text-xs uppercase font-bold tracking-wider rounded-lg transition-colors">
+              <Link to="/educator/subjects" className="btn bg-bg2 text-text2 hover:text-red-500 px-4 py-2 shadow-sm border border-border text-xs uppercase font-bold tracking-wider rounded-lg transition-colors">
                 Cancel
               </Link>
               <button type="submit" className="btn btn-primary px-8 shadow-md text-sm font-bold uppercase tracking-widest" disabled={loading}>

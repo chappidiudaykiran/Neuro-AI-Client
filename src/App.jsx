@@ -12,6 +12,9 @@ import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/Admin'
 import AdminAddSubject from './pages/AdminAddSubject'
 import AdminEditSubject from './pages/AdminEditSubject'
+import AdminAssignments from './pages/AdminAssignments'
+import Assignments from './pages/Assignments'
+import AssignmentPage from './pages/AssignmentPage'
 import EducatorDashboard from './pages/Educator'
 import ChangePassword from './pages/ChangePassword'
 import EditProfile from './pages/EditProfile'
@@ -23,16 +26,6 @@ function PrivateRoute({ children }) {
     <div className="spinner" />
   </div>
   return user ? children : <Navigate to="/login" replace />
-}
-
-
-// Redirects to / if not an admin
-function AdminRoute({ children }) {
-  const { user, isAdmin, loading } = useAuth()
-  if (loading) return null
-  if (!user) return <Navigate to="/login" replace />
-  if (!isAdmin) return <Navigate to="/" replace />
-  return children
 }
 
 // Redirects to / if not an educator
@@ -66,33 +59,44 @@ function AppRoutes() {
         <Route path="/dashboard" element={
           <PrivateRoute><Dashboard /></PrivateRoute>
         } />
+        <Route path="/assignments" element={
+          <PrivateRoute><Assignments /></PrivateRoute>
+        } />
+        <Route path="/courses/:id/assignment/:moduleNumber" element={
+          <PrivateRoute><AssignmentPage /></PrivateRoute>
+        } />
         <Route path="/change-password" element={
           <PrivateRoute><ChangePassword /></PrivateRoute>
         } />
         <Route path="/edit-profile" element={
           <PrivateRoute><EditProfile /></PrivateRoute>
         } />
-        <Route path="/change-password" element={
-          <PrivateRoute><ChangePassword /></PrivateRoute>
-        } />
         <Route path="/student/change-password" element={
           <PrivateRoute><ChangePassword /></PrivateRoute>
         } />
-        <Route path="/student/change-password" element={
-          <PrivateRoute><ChangePassword /></PrivateRoute>
-        } />
-        <Route path="/admin" element={
-          <AdminRoute><AdminDashboard /></AdminRoute>
-        } />
-        <Route path="/admin/add" element={
-          <AdminRoute><AdminAddSubject /></AdminRoute>
-        } />
-        <Route path="/admin/edit/:id" element={
-          <AdminRoute><AdminEditSubject /></AdminRoute>
-        } />
+
+        {/* Educator routes (manage subjects, assignments, student insights) */}
         <Route path="/educator" element={
           <EducatorRoute><EducatorDashboard /></EducatorRoute>
         } />
+        <Route path="/educator/subjects" element={
+          <EducatorRoute><AdminDashboard /></EducatorRoute>
+        } />
+        <Route path="/educator/subjects/add" element={
+          <EducatorRoute><AdminAddSubject /></EducatorRoute>
+        } />
+        <Route path="/educator/subjects/edit/:id" element={
+          <EducatorRoute><AdminEditSubject /></EducatorRoute>
+        } />
+        <Route path="/educator/assignments" element={
+          <EducatorRoute><AdminAssignments /></EducatorRoute>
+        } />
+
+        {/* Keep old admin routes working as redirects */}
+        <Route path="/admin" element={<Navigate to="/educator/subjects" replace />} />
+        <Route path="/admin/add" element={<Navigate to="/educator/subjects/add" replace />} />
+        <Route path="/admin/edit/:id" element={<Navigate to="/educator/subjects/edit/:id" replace />} />
+        <Route path="/admin/assignments" element={<Navigate to="/educator/assignments" replace />} />
 
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />

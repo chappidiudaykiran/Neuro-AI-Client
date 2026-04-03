@@ -6,32 +6,33 @@ export default function AdminCourseList({ refreshTrigger, onRefresh }) {
   const navigate = useNavigate()
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
+  const [expandedCategory, setExpandedCategory] = useState(null)
 
   const getCategoryStyles = (cat) => {
     switch(cat) {
       case 'CS Core': 
         return { 
-          card: 'border-emerald-300 dark:border-emerald-800 ring-4 ring-emerald-100/20', 
-          header: 'bg-emerald-200/80 dark:bg-emerald-900/80 text-black dark:text-white border-emerald-300',
-          badge: 'bg-emerald-600 text-white',
-          row: 'bg-emerald-100/70 dark:bg-emerald-900/40 border-emerald-200',
-          accent: 'border-emerald-600'
+          card: 'border-emerald-200 dark:border-emerald-900/50', 
+          header: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100 border-emerald-200',
+          badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200',
+          row: 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-100',
+          accent: 'border-emerald-400'
         };
       case 'GATE Prep': 
         return { 
-          card: 'border-violet-300 dark:border-violet-800 ring-4 ring-violet-100/20', 
-          header: 'bg-violet-200/80 dark:bg-violet-900/80 text-black dark:text-white border-violet-300',
-          badge: 'bg-violet-600 text-white',
-          row: 'bg-violet-100/70 dark:bg-violet-900/40 border-violet-200',
-          accent: 'border-violet-600'
+          card: 'border-violet-200 dark:border-violet-900/50', 
+          header: 'bg-violet-50 dark:bg-violet-900/20 text-violet-900 dark:text-violet-100 border-violet-200',
+          badge: 'bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200',
+          row: 'bg-violet-50/50 dark:bg-violet-900/10 border-violet-100',
+          accent: 'border-violet-400'
         };
       case 'Programming': 
         return { 
-          card: 'border-sky-300 dark:border-sky-800 ring-4 ring-sky-100/20', 
-          header: 'bg-sky-200/80 dark:bg-sky-900/80 text-black dark:text-white border-sky-300',
-          badge: 'bg-sky-600 text-white',
-          row: 'bg-sky-100/70 dark:bg-sky-900/40 border-sky-200',
-          accent: 'border-sky-600'
+          card: 'border-sky-200 dark:border-sky-900/50', 
+          header: 'bg-sky-50 dark:bg-sky-900/20 text-sky-900 dark:text-sky-100 border-sky-200',
+          badge: 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200',
+          row: 'bg-sky-50/50 dark:bg-sky-900/10 border-sky-100',
+          accent: 'border-sky-400'
         };
       default: 
         return { 
@@ -86,15 +87,24 @@ export default function AdminCourseList({ refreshTrigger, onRefresh }) {
             const styles = getCategoryStyles(category);
             
             return (
-              <div key={category} className={`border-2 rounded-2xl bg-bg dark:bg-bg2 shadow-lg overflow-hidden mb-12 transition-shadow hover:shadow-xl ${styles.card}`}>
-                <div className={`px-6 py-5 border-b-2 font-heading font-black uppercase tracking-widest flex justify-between items-center text-base sm:text-lg text-black dark:text-white ${styles.header}`}>
+              <div key={category} className={`border-2 rounded-2xl bg-bg dark:bg-bg2 shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl ${styles.card} ${expandedCategory === category ? 'ring-4 ring-offset-2 ring-offset-bg dark:ring-offset-bg2' : ''}`}>
+                <div 
+                  className={`px-6 py-5 border-b-2 font-heading font-black uppercase tracking-widest flex justify-between items-center text-base sm:text-lg text-black dark:text-white cursor-pointer select-none transition-colors hover:opacity-90 ${styles.header}`}
+                  onClick={() => setExpandedCategory(prev => prev === category ? null : category)}
+                >
                   <div className="flex items-center gap-3 drop-shadow-sm">
                     <span className="w-3 h-3 rounded-full bg-black dark:bg-white shadow-sm"></span>
                     {category} Subjects
                   </div>
-                  <span className={`px-5 py-2 rounded-full text-xs font-black shadow-md ${styles.badge}`}>{catCourses.length} Registered</span>
+                  <div className="flex items-center gap-4">
+                    <span className={`px-5 py-2 rounded-full text-xs font-black shadow-md ${styles.badge}`}>{catCourses.length} Registered</span>
+                    <svg className={`w-5 h-5 transition-transform duration-300 ${expandedCategory === category ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="overflow-x-auto p-1 sm:p-2">
+                {expandedCategory === category && (
+                  <div className="overflow-x-auto p-1 sm:p-2 animate-fade-in">
                   <table className="w-full text-left text-sm whitespace-nowrap">
                     <tbody className="divide-y divide-black/10 dark:divide-white/10">
                       {catCourses.map(c => (
@@ -104,14 +114,15 @@ export default function AdminCourseList({ refreshTrigger, onRefresh }) {
                             <span className="text-[13px] font-black bg-white dark:bg-bg3 text-black dark:text-white rounded-lg py-1.5 px-3 border-2 border-black/10 dark:border-white/10 shadow-sm">{c.videos?.length || 0} Lessons</span>
                           </td>
                           <td className="px-4 py-4 text-right space-x-3">
-                            <button onClick={() => navigate(`/admin/edit/${c._id}`)} className="btn bg-white dark:bg-blue-600 text-blue-800 dark:text-white hover:bg-black hover:text-white border-2 border-blue-300 dark:border-blue-500/30 px-6 py-2 text-[12px] shadow-md transition-all uppercase font-black tracking-widest rounded-xl">Edit</button>
+                            <button onClick={() => navigate(`/educator/subjects/edit/${c._id}`)} className="btn bg-white dark:bg-blue-600 text-blue-800 dark:text-white hover:bg-black hover:text-white border-2 border-blue-300 dark:border-blue-500/30 px-6 py-2 text-[12px] shadow-md transition-all uppercase font-black tracking-widest rounded-xl">Edit</button>
                             <button onClick={() => handleDelete(c._id, c.name)} className="btn bg-white dark:bg-red-600 text-red-700 dark:text-white hover:bg-black hover:text-white border-2 border-red-300 dark:border-red-500/30 px-6 py-2 text-[12px] shadow-md transition-all uppercase font-black tracking-widest rounded-xl">Drop</button>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
+                  </div>
+                )}
               </div>
             )
           })}

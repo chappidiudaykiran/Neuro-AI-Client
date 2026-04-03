@@ -10,7 +10,7 @@ export default function Register() {
 
   const [form, setForm] = useState({
     name: '', email: '', password: '', role: 'student',
-    age: '', gender: '1'
+    age: '', gender: '1', learningStyle: '0'
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -33,6 +33,7 @@ export default function Register() {
         ...form,
         age: Number(form.age),
         gender: Number(form.gender),
+        learningStyle: Number(form.learningStyle),
       }
       const res = await registerUser(payload)
       login(res.data.user, res.data.token)
@@ -53,6 +54,7 @@ export default function Register() {
         role: form.role,
         age: Number(form.age) || 20,
         gender: Number(form.gender),
+        learningStyle: Number(form.learningStyle) || 0,
       }
       const res = await googleAuth(payload)
       login(res.data.user, res.data.token)
@@ -69,7 +71,7 @@ export default function Register() {
 
   return (
     <div className="page theme-auth">
-      <div className="container w-full max-w-5xl pt-4 sm:pt-6">
+      <div className="container w-full max-w-5xl pt-6 sm:pt-8">
         <div className="fade-up mb-8 text-center">
           <h2 className="mb-2 text-[18px] font-extrabold leading-tight text-text sm:text-[20px]">
             Create your account
@@ -100,7 +102,7 @@ export default function Register() {
             <div className="form-group grid grid-cols-2 gap-4">
               <div>
                 <label className="label auth-label">Age</label>
-                <input className="input auth-input" type="number" min="15" max="35" placeholder="22" value={form.age} onChange={set('age')} required />
+                <input className="input auth-input" type="number" min="18" max="30" placeholder="22" value={form.age} onChange={set('age')} required />
               </div>
               <div>
                 <label className="label auth-label">Gender</label>
@@ -109,6 +111,14 @@ export default function Register() {
                   <option value="0">Female</option>
                 </select>
               </div>
+            </div>
+            <div className="form-group">
+              <label className="label auth-label">Learning Style</label>
+              <select className="input auth-input" value={form.learningStyle} onChange={set('learningStyle')}>
+                <option value="0">Visual (Images, videos, diagrams)</option>
+                <option value="1">Auditory (Listening, speaking, discussions)</option>
+                <option value="2">Kinesthetic (Hands-on, interactive, practice)</option>
+              </select>
             </div>
             <div className="form-group">
               <label className="label auth-label">Password</label>

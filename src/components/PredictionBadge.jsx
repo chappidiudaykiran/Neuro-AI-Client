@@ -1,68 +1,93 @@
-﻿import { gradeLabel, gradeColor, stressLabel, stressColor, stateLabel, stateColor } from '../utils/helpers'
+import { gradeLabel, stressLabel, stateLabel } from '../utils/helpers'
+import { GraduationCap, Activity, Scale } from 'lucide-react'
 
 export default function PredictionBadge({ prediction }) {
   const { grade, stress, state } = prediction
+
   const gradeTone = {
-    0: 'border-red-500/25 bg-red-500/10 text-red-400',
-    1: 'border-amber-500/25 bg-amber-500/10 text-amber-300',
-    2: 'border-blue-500/25 bg-blue-500/10 text-blue-300',
-    3: 'border-green-500/25 bg-green-500/10 text-green-400',
-  }[grade] || 'border-white/10 bg-white/5 text-text'
+    0: 'from-red-500/10 to-transparent border-red-500/20',
+    1: 'from-amber-500/10 to-transparent border-amber-500/20',
+    2: 'from-blue-500/10 to-transparent border-blue-500/20',
+    3: 'from-green-500/10 to-transparent border-green-500/20',
+  }[grade] || 'from-white/5 to-transparent border-black/10 dark:border-white/10'
 
   const stressTone = {
-    0: 'border-green-500/25 bg-green-500/10 text-green-400',
-    1: 'border-amber-500/25 bg-amber-500/10 text-amber-300',
-    2: 'border-red-500/25 bg-red-500/10 text-red-400',
-  }[stress] || 'border-white/10 bg-white/5 text-text'
+    0: 'from-green-500/10 to-transparent border-green-500/20',
+    1: 'from-amber-500/10 to-transparent border-amber-500/20',
+    2: 'from-red-500/10 to-transparent border-red-500/20',
+  }[stress] || 'from-white/5 to-transparent border-black/10 dark:border-white/10'
 
   const stateTone = {
-    optimal: 'border-green-500/25 bg-green-500/10 text-green-400',
-    burnout_risk: 'border-amber-500/25 bg-amber-500/10 text-amber-300',
-    academic_gap: 'border-blue-500/25 bg-blue-500/10 text-blue-300',
-    critical: 'border-red-500/25 bg-red-500/10 text-red-400',
-  }[state] || 'border-white/10 bg-white/5 text-text'
+    optimal: 'from-green-500/10 to-transparent border-green-500/20',
+    burnout_risk: 'from-amber-500/10 to-transparent border-amber-500/20',
+    academic_gap: 'from-blue-500/10 to-transparent border-blue-500/20',
+    critical: 'from-red-500/10 to-transparent border-red-500/20',
+  }[state] || 'from-white/5 to-transparent border-black/10 dark:border-white/10'
+
+  const gradeTextColor = {
+    0: 'text-red-600 dark:text-red-400',
+    1: 'text-amber-600 dark:text-amber-400',
+    2: 'text-blue-600 dark:text-blue-400',
+    3: 'text-green-600 dark:text-green-400',
+  }[grade] || 'text-text'
+
+  const stressTextColor = {
+    0: 'text-green-600 dark:text-green-400',
+    1: 'text-amber-600 dark:text-amber-400',
+    2: 'text-red-600 dark:text-red-400',
+  }[stress] || 'text-text'
+
+  const stateTextColor = {
+    optimal: 'text-green-600 dark:text-green-400',
+    burnout_risk: 'text-amber-600 dark:text-amber-400',
+    academic_gap: 'text-blue-600 dark:text-blue-400',
+    critical: 'text-red-600 dark:text-red-400',
+  }[state] || 'text-text'
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-      {/* Grade */}
-      <div className={`rounded-2xl border px-4 py-5 text-center ${gradeTone}`}>
-        <div className="mb-2 text-[11px] uppercase tracking-wider text-text3">
-          Predicted Grade
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {/* Grade Card */}
+      <div className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${gradeTone} text-text`}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[11px] font-bold uppercase tracking-widest opacity-80 text-text2">Predicted Grade</div>
+          <div className={`p-2 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 backdrop-blur-sm shadow-sm ${gradeTextColor}`}><GraduationCap size={20} /></div>
         </div>
-        <div className="font-heading text-[26px] font-extrabold">
+        <div className={`font-heading text-3xl font-black mb-1 ${gradeTextColor}`}>
           {gradeLabel(grade)}
         </div>
-        <div className="mt-1 text-[11px] text-text3">
-          Level {grade} / 3
+        <div className="text-[13px] text-text2 font-medium mt-1">
+          Level {grade} / 3 Metrics
         </div>
       </div>
 
-      {/* Stress */}
-      <div className={`rounded-2xl border px-4 py-5 text-center ${stressTone}`}>
-        <div className="mb-2 text-[11px] uppercase tracking-wider text-text3">
-          Stress Level
+      {/* Stress Card */}
+      <div className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${stressTone} text-text`}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[11px] font-bold uppercase tracking-widest opacity-80 text-text2">Stress Level</div>
+          <div className={`p-2 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 backdrop-blur-sm shadow-sm ${stressTextColor}`}><Activity size={20} /></div>
         </div>
-        <div className="font-heading text-[26px] font-extrabold">
+        <div className={`font-heading text-3xl font-black mb-1 ${stressTextColor}`}>
           {stressLabel(stress)}
         </div>
-        <div className="mt-1 text-[11px] text-text3">
-          {stress === 0 ? 'All good' : stress === 1 ? 'Manageable' : 'Needs attention'}
+        <div className="text-[13px] text-text2 font-medium mt-1">
+          {stress === 0 ? 'Optimal state' : stress === 1 ? 'Manageable capacity' : 'Critical pressure'}
         </div>
       </div>
 
-      {/* State */}
-      <div className={`rounded-2xl border px-4 py-5 text-center ${stateTone}`}>
-        <div className="mb-2 text-[11px] uppercase tracking-wider text-text3">
-          Your State
+      {/* State Card */}
+      <div className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${stateTone} text-text`}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[11px] font-bold uppercase tracking-widest opacity-80 text-text2">Overall State</div>
+          <div className={`p-2 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 backdrop-blur-sm shadow-sm ${stateTextColor}`}><Scale size={20} /></div>
         </div>
-        <div className="font-heading text-lg font-extrabold leading-tight">
+        <div className={`font-heading text-2xl font-black mb-1 whitespace-nowrap overflow-hidden text-ellipsis ${stateTextColor}`}>
           {stateLabel(state)}
         </div>
-        <div className="mt-1.5 text-[11px] text-text3">
-          {state === 'optimal'      && 'Keep it up!'}
-          {state === 'burnout_risk' && 'Slow down a little'}
-          {state === 'academic_gap' && 'Study more'}
-          {state === 'critical'     && 'Needs support'}
+        <div className="text-[13px] text-text2 font-medium mt-1">
+          {state === 'optimal'      && 'All systems go!'}
+          {state === 'burnout_risk' && 'Pacing required'}
+          {state === 'academic_gap' && 'Focus needed'}
+          {state === 'critical'     && 'Intervention needed'}
         </div>
       </div>
     </div>

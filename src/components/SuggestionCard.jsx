@@ -1,4 +1,4 @@
-﻿import { actionIcon } from '../utils/helpers'
+import { BookOpen, Coffee, CheckCircle, HelpCircle, Flame, Lightbulb } from 'lucide-react'
 
 const actionLabel = {
   focus_more: 'Focus More',
@@ -9,39 +9,47 @@ const actionLabel = {
 }
 
 const actionTone = {
-  focus_more: 'border-blue-500/20 bg-blue-500/10',
-  take_break: 'border-amber-500/20 bg-amber-500/10',
-  on_track: 'border-green-500/20 bg-green-500/10',
-  seek_help: 'border-violet-500/20 bg-violet-500/10',
-  keep_going: 'border-emerald-500/20 bg-emerald-500/10',
+  focus_more: 'border-blue-500/30 dark:border-blue-500/20 bg-blue-500/10',
+  take_break: 'border-amber-500/30 dark:border-amber-500/20 bg-amber-500/10',
+  on_track: 'border-green-500/30 dark:border-green-500/20 bg-green-500/10',
+  seek_help: 'border-violet-500/30 dark:border-violet-500/20 bg-violet-500/10',
+  keep_going: 'border-emerald-500/30 dark:border-emerald-500/20 bg-emerald-500/10',
 }
 
 export default function SuggestionCard({ suggestion }) {
   const { subject, action, message } = suggestion
-  const icon  = actionIcon(action)
   const label = actionLabel[action] ?? action
   const tone = actionTone[action] ?? 'border-border bg-bg2'
+  
   const iconTone = {
-    focus_more: 'text-blue-300 border-blue-500/20 bg-blue-500/10',
-    take_break: 'text-amber-300 border-amber-500/20 bg-amber-500/10',
-    on_track: 'text-green-300 border-green-500/20 bg-green-500/10',
-    seek_help: 'text-violet-300 border-violet-500/20 bg-violet-500/10',
-    keep_going: 'text-emerald-300 border-emerald-500/20 bg-emerald-500/10',
+    focus_more: 'text-blue-500 dark:text-blue-400 border-blue-500/20 bg-blue-500/10',
+    take_break: 'text-amber-500 dark:text-amber-400 border-amber-500/20 bg-amber-500/10',
+    on_track: 'text-green-500 dark:text-green-400 border-green-500/20 bg-green-500/10',
+    seek_help: 'text-violet-500 dark:text-violet-400 border-violet-500/20 bg-violet-500/10',
+    keep_going: 'text-emerald-500 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/10',
   }[action] || 'text-text2 border-border bg-bg3'
 
   const chipTone = {
-    focus_more: 'text-blue-300 bg-blue-500/10',
-    take_break: 'text-amber-300 bg-amber-500/10',
-    on_track: 'text-green-300 bg-green-500/10',
-    seek_help: 'text-violet-300 bg-violet-500/10',
-    keep_going: 'text-emerald-300 bg-emerald-500/10',
+    focus_more: 'text-blue-600 dark:text-blue-300 bg-blue-500/10',
+    take_break: 'text-amber-600 dark:text-amber-300 bg-amber-500/10',
+    on_track: 'text-green-600 dark:text-green-300 bg-green-500/10',
+    seek_help: 'text-violet-600 dark:text-violet-300 bg-violet-500/10',
+    keep_going: 'text-emerald-600 dark:text-emerald-300 bg-emerald-500/10',
   }[action] || 'text-text2 bg-bg3'
 
+  const IconComponent = {
+    focus_more: BookOpen,
+    take_break: Coffee,
+    on_track: CheckCircle,
+    seek_help: HelpCircle,
+    keep_going: Flame
+  }[action] || Lightbulb
+
   return (
-    <div className={`flex items-start gap-4 rounded-2xl border p-5 transition hover:border-border2 ${tone}`}>
+    <div className={`flex items-start gap-4 rounded-2xl border p-5 transition hover:border-black/20 dark:hover:border-white/40 ${tone}`}>
       {/* Icon bubble */}
-      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-xl ${iconTone}`}>
-        {icon}
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${iconTone}`}>
+        <IconComponent size={20} className="stroke-[2.5]" />
       </div>
 
       <div className="min-w-0 flex-1">
