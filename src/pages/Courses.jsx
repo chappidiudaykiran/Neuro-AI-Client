@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { getCategoriesSummary, getMySubjects } from '../api/courses'
+import { useAuth } from '../context/AuthContext'
 import CategoryCard from '../components/CategoryCard'
 import CourseCard from '../components/CourseCard'
 
 export default function Courses() {
+  const { updateUser } = useAuth()
   const [categories, setCategories] = useState([])
   const [enrolledSubjects, setEnrolledSubjects] = useState([])
   const [loading, setLoading]       = useState(true)
@@ -24,6 +26,9 @@ export default function Courses() {
           });
           setCategories(sorted);
           setEnrolledSubjects(enrolledRes.data || []);
+          // Sync enrolled IDs into auth context so CourseCard knows enrollment status
+          const ids = (enrolledRes.data || []).map(s => s._id)
+          updateUser({ selectedSubjects: ids })
       })
       .catch((err) => {
          console.error(err);

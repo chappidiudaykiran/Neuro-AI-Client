@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 export default function CourseCard({ course, index = 0 }) {
   const navigate = useNavigate()
   const { user, updateUser } = useAuth()
-  const isEnrolled = user?.selectedSubjects?.includes(course._id)
+  const isEnrolled = user?.selectedSubjects?.some(id => String(id) === String(course._id))
 
   const handleToggle = async (e) => {
     e.stopPropagation()
@@ -112,7 +112,9 @@ export default function CourseCard({ course, index = 0 }) {
       )
     }
   ]
-  const design = designs[index % designs.length]
+  // Use the course ID to generate a stable, consistent theme color regardless of what list it is in
+  const stableIndex = course._id ? (parseInt(course._id.slice(-4), 16) % designs.length) : (index % designs.length);
+  const design = designs[stableIndex]
 
   return (
     <div
@@ -155,9 +157,7 @@ export default function CourseCard({ course, index = 0 }) {
           </span>
           <button 
             onClick={handleToggle} 
-            className={`inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-all duration-300 ${isEnrolled 
-              ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/40 hover:-translate-y-0.5 border-none' 
-              : 'bg-bg3 text-text2 hover:bg-accent hover:text-white border border-border/60 hover:border-transparent shadow-sm'}`}
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-all duration-300 bg-bg3 text-text2 hover:bg-accent hover:text-white border border-border/60 hover:border-transparent shadow-sm"
           >
             {isEnrolled ? (
               <>

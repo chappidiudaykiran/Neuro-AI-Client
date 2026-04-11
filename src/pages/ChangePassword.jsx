@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { changePassword } from '../api/auth'
+import { ArrowLeft } from 'lucide-react'
 
 function SecurityBadgeIcon() {
   return (
@@ -90,11 +91,13 @@ export default function ChangePassword() {
       <div className="container max-w-xl pb-6 pt-3 sm:pt-4">
         <button
           type="button"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg bg-bg2 px-3 py-1.5 text-sm font-medium text-text2 hover:bg-bg3 hover:text-text"
+          className="group mb-8 inline-flex items-center gap-2.5 text-sm font-semibold text-text2 hover:text-accent transition-colors duration-300"
           onClick={() => navigate(-1)}
         >
-          <span aria-hidden="true">←</span>
-          <span>Return</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-bg2 border border-border group-hover:border-accent/30 group-hover:bg-accent/5 transition-all duration-300 shadow-sm">
+            <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
+          </div>
+          Back
         </button>
 
         <div className="mb-5 flex items-center gap-3">

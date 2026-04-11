@@ -6,6 +6,7 @@ import YouTubePlayer from '../components/YouTubePlayer'
 import FeedbackModal from '../components/FeedbackModal'
 import StressBadge from '../components/StressBadge'
 import AssignmentView from '../components/AssignmentView'
+import { ArrowLeft } from 'lucide-react'
 
 export default function VideoPlayer() {
   const { id } = useParams()
@@ -99,11 +100,15 @@ export default function VideoPlayer() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
           <div className="flex flex-col min-w-0">
             <div className="-mt-2 mb-4 flex items-center gap-3 text-sm text-text2">
-              <Link to={`/courses/category/${course.category?.toLowerCase().replace(/\s+/g, '-')}`} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg2 px-3 py-1.5 text-xs font-medium text-text2 transition hover:bg-bg3 hover:text-text">
-                <span className="text-base leading-none">&larr;</span> Back to {course.category || 'Subjects'}
+              <Link 
+                to={`/courses/category/${course.category?.toLowerCase().replace(/\s+/g, '-')}`} 
+                className="group inline-flex items-center gap-2 rounded-lg border border-border/40 bg-bg2/40 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-text2 backdrop-blur-md transition-all duration-300 hover:border-accent/40 hover:bg-bg2/60 hover:text-accent shadow-sm"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
+                Return to {course.category || 'Subjects'}
               </Link>
-              <span className="text-text3">/</span>
-              <span className="truncate">{course.name}</span>
+              <span className="text-text3 opacity-40">/</span>
+              <span className="truncate opacity-80">{course.name}</span>
             </div>
 
             <div className="mb-2">

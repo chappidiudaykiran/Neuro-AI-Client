@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 import { getCoursesByCategory } from '../api/courses'
 import CourseCard from '../components/CourseCard'
 
@@ -31,10 +32,13 @@ export default function CategoryCourses() {
     <div className="page theme-auth pb-20 border-t border-border bg-bg min-h-screen">
       <div className="container pt-10 pb-6 relative">
         
-        {/* Isolated Back Button (Native Position) */}
+        {/* Isolated Return Button */}
         <div className="mb-0 relative z-20">
-          <Link to="/courses" className="text-text3 hover:text-accent flex items-center gap-2 font-medium w-fit transition-colors bg-bg2 px-4 py-2 rounded-full border border-border shadow-sm text-sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <Link 
+            to="/courses" 
+            className="group inline-flex items-center gap-2.5 rounded-xl border border-border/40 bg-bg2/40 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-text2 backdrop-blur-md transition-all duration-300 hover:border-accent/40 hover:bg-bg2/60 hover:text-accent shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
             Return
           </Link>
         </div>

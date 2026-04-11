@@ -4,18 +4,22 @@ import { useAuth } from '../context/AuthContext'
 import { getCategoriesSummary, getCourses } from '../api/courses'
 import CategoryCard from '../components/CategoryCard'
 import { getSlug } from '../components/CategoryCard'
+import EnrolledSection from '../components/student/EnrolledSection'
+import AssignmentsSection from '../components/student/AssignmentsSection'
+import DashboardSection from '../components/student/DashboardSection'
 
 const SUBJECTS = ['Data Structures', 'Machine Learning', 'Operating Systems', 'GATE Prep', 'Python', 'DBMS', 'Computer Networks', 'C Programming']
 const CATEGORIES = ['GATE Prep', 'Programming', 'CS Core']
 
 export default function Home() {
-  const { user } = useAuth()
+  const { user, isEducator } = useAuth()
   const navigate = useNavigate()
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(null)
   const [wordIndex, setWordIndex] = useState(0)
   const [allCourses, setAllCourses] = useState([])
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,9 +56,12 @@ export default function Home() {
     return 'Good Evening'
   }
 
+  const hasEnrolledSubjects = user?.selectedSubjects?.length > 0;
+
   return (
     <div className="page bg-bg text-text selection:bg-accent/30 selection:text-accent">
       
+      {/* ====== Hero ====== */}
       {/* ====== Hero ====== */}
       <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden border-b border-border"
         style={{
@@ -76,8 +83,7 @@ export default function Home() {
             {user ? (
               <>{greetUser()}, <span className="hero-gradient-text">{user.name?.split(' ')[0]}</span>!</>
             ) : (
-              <>Learn Smarter with{' '}<br className="hidden sm:block" />
-              <span className="hero-gradient-text">Neuro-AI</span></>
+              <>Learn Smarter with <span className="hero-gradient-text">Neuro-AI</span></>
             )}
           </h1>
 
@@ -94,7 +100,7 @@ export default function Home() {
               </div>
               <input
                 type="text"
-                placeholder={SUBJECTS[wordIndex]}
+                placeholder={`Search "${SUBJECTS[wordIndex]}"`}
                 className="flex-1 bg-transparent px-4 py-4 text-[15px] text-text placeholder:text-text3 outline-none"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -134,8 +140,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ====== Courses ====== */}
-      <section className="py-24 border-b border-border relative bg-bg2/30">
+      {user && !isEducator && hasEnrolledSubjects ? (
+        <section className="py-16 bg-bg relative border-b border-border">
+          <div className="container max-w-6xl mx-auto space-y-24">
+            <EnrolledSection />
+            <AssignmentsSection />
+            <DashboardSection />
+          </div>
+        </section>
+      ) : (
+        <section className="py-24 relative pb-32">
         <div className="container">
           <div className="text-center mb-16">
              <h2 className="font-heading text-3xl font-extrabold md:text-4xl mb-4">Explore Our Curriculum</h2>
@@ -163,9 +177,10 @@ export default function Home() {
           ) : null}
         </div>
       </section>
+      )}
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-sm text-text3 bg-bg2 flex flex-col items-center">
+      <footer className="border-t border-border py-8 text-center text-sm text-text3 bg-bg flex flex-col items-center">
         <p className="font-medium text-text2">© 2026 Neuro-AI · Adaptive Educational Intelligence</p>
         <p className="mt-1 opacity-80">Developed by students of CSE 3B Team 14</p>
       </footer>

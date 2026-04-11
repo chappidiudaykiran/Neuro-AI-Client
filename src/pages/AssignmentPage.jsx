@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getCourseById } from '../api/courses'
 import { getMySubmissions } from '../api/assignments'
+import { ArrowLeft } from 'lucide-react'
 import AssignmentView from '../components/AssignmentView'
 
 export default function AssignmentPage() {
@@ -40,9 +41,12 @@ export default function AssignmentPage() {
       <div className="container py-10 max-w-5xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <Link to={`/courses/${id}`} className="btn btn-outline btn-sm sm:btn-md shrink-0 border-border/50 hover:bg-bg3 text-text3 hover:text-text transition-colors shadow-sm">
-              <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-              Back to Course Playlist
+            <Link 
+              to={`/courses/${id}`} 
+              className="group inline-flex items-center gap-2.5 rounded-xl border border-border/40 bg-bg2/40 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-text2 backdrop-blur-md transition-all duration-300 hover:border-accent/40 hover:bg-bg2/60 hover:text-accent shadow-sm"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
+              Return
             </Link>
           </div>
           <div className="hidden sm:block">

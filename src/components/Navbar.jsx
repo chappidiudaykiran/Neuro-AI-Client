@@ -106,19 +106,19 @@ export default function Navbar() {
           </NavLink>
         </div>
 
-        {/* Search Bar (after logo) */}
-        {user && (
+        {/* Search Bar (after logo) — hidden for educators */}
+        {user && !isEducator && (
           <NavbarSearch navigate={navigate} />
         )}
 
         {/* Center Nav Links (Desktop) */}
         {user && (
           <div className="hidden md:flex flex-1 justify-center">
-            <div className="nav-links">
-              <NavLink to="/" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} end>
+            <div className={`nav-links ${isEducator ? 'gap-0.5' : ''}`}>
+              <NavLink to="/" className={({ isActive }) => `nav-link${isEducator ? ' text-sm px-3' : ''}` + (isActive ? ' active' : '')} end>
                 Home
               </NavLink>
-              <NavLink to="/courses" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+              <NavLink to="/courses" className={({ isActive }) => `nav-link${isEducator ? ' text-sm px-3' : ''}` + (isActive ? ' active' : '')}>
                 Courses
               </NavLink>
               {!isEducator && (
@@ -126,17 +126,17 @@ export default function Navbar() {
                   Dashboard
                 </NavLink>
               )}
-              <NavLink to={isEducator ? '/educator/assignments' : '/assignments'} className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+              <NavLink to={isEducator ? '/educator/assignments' : '/assignments'} className={({ isActive }) => `nav-link${isEducator ? ' text-sm px-3' : ''}` + (isActive ? ' active' : '')}>
                 Assignments
               </NavLink>
               {isEducator && (
-                <NavLink to="/educator/subjects" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-                  Manage Subjects
+                <NavLink to="/educator/subjects" className={({ isActive }) => 'nav-link text-sm px-3' + (isActive ? ' active' : '')}>
+                  Subjects
                 </NavLink>
               )}
               {isEducator && (
-                <NavLink to="/educator" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-                  Student Insights
+                <NavLink to="/educator" className={({ isActive }) => 'nav-link text-sm px-3' + (isActive ? ' active' : '')}>
+                  Insights
                 </NavLink>
               )}
             </div>
@@ -251,12 +251,12 @@ export default function Navbar() {
           </NavLink>
           {isEducator && (
             <NavLink to="/educator/subjects" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
-              Manage Subjects
+              Subjects
             </NavLink>
           )}
           {isEducator && (
             <NavLink to="/educator" className={({ isActive }) => 'nav-link text-center text-base py-3' + (isActive ? ' active' : '')} onClick={() => setMobileMenuOpen(false)}>
-              Student Insights
+              Insights
             </NavLink>
           )}
         </div>

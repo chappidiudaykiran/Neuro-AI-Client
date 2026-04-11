@@ -120,9 +120,11 @@ export default function AdminEditSubject() {
         {/* Header */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <Link to="/educator/subjects" className="text-text3 hover:text-accent flex items-center gap-2 font-medium w-fit transition-colors bg-bg2 px-4 py-2 rounded-full border border-border shadow-sm text-sm mb-4">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-              Back to Manage Subjects
+            <Link to="/educator/subjects" className="group inline-flex items-center gap-2.5 text-sm font-semibold text-text3 hover:text-text transition-colors mb-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-bg2 transition-colors group-hover:border-accent group-hover:bg-accent/5 group-hover:text-accent shadow-sm">
+                <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+              </div>
+              Back to Subjects
             </Link>
             <h1 className="page-title text-2xl font-extrabold font-heading text-text flex items-center gap-3">
               <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
