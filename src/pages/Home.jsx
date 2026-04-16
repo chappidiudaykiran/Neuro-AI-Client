@@ -142,10 +142,9 @@ export default function Home() {
 
       {user && !isEducator && hasEnrolledSubjects ? (
         <section className="py-16 bg-bg relative border-b border-border">
-          <div className="container max-w-6xl mx-auto space-y-24">
-            <EnrolledSection />
+          <div className="container max-w-6xl mx-auto space-y-16">
+            <DashboardSection isHome={true} />
             <AssignmentsSection />
-            <DashboardSection />
           </div>
         </section>
       ) : (

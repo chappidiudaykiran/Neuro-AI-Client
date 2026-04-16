@@ -57,7 +57,7 @@ export default function Assignments() {
             <Link to="/courses" className="btn btn-primary">Browse Courses</Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 items-start fade-up-2">
+          <div className="flex flex-col gap-6 items-start fade-up-2">
             {[...subjects]
               .sort((a, b) => {
                 const aOpen = expandedSubjects.has(a._id)
