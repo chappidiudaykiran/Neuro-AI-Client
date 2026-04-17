@@ -102,21 +102,21 @@ export default function EducatorDashboard() {
 
   return (
     <div className="page theme-dashboard">
-      <div className="container max-w-[1600px] py-12 px-4 sm:px-8">
-        <div className="fade-up mb-12">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-bg2 p-8 rounded-3xl border-2 border-border shadow-xl">
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center border-2 border-accent/20 shadow-inner">
+      <div className="container max-w-[1600px] py-6 md:py-12 px-3 sm:px-8">
+        <div className="fade-up mb-6 md:mb-12">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 bg-white dark:bg-bg2 p-4 md:p-8 rounded-2xl md:rounded-3xl border-2 border-border shadow-xl">
+            <div className="flex items-center gap-4 md:gap-6">
+              <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-accent/10 flex items-center justify-center border-2 border-accent/20 shadow-inner shrink-0">
                 {/* User Icon */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent md:w-10 md:h-10"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 group">
-                  <h1 className="text-3xl font-black text-black dark:text-white tracking-tight">{user?.name || 'Educator Profile'}</h1>
+                  <h1 className="text-xl md:text-3xl font-black text-black dark:text-white tracking-tight">{user?.name || 'Educator Profile'}</h1>
                   {/* Shield Check Icon */}
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 fill-emerald-500/10 group-hover:scale-110 transition-transform"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
                 </div>
-                <div className="flex items-center gap-2 text-text3 font-medium">
+                <div className="flex items-center gap-2 text-text3 font-medium text-xs md:text-sm">
                   {/* Mail Icon */}
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                   <span>{user?.email}</span>
@@ -129,7 +129,7 @@ export default function EducatorDashboard() {
             
             <div className="flex gap-4 border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10">
               <div className="text-center md:text-left">
-                <div className="text-4xl font-black text-black dark:text-white">{students.length}</div>
+                <div className="text-3xl md:text-4xl font-black text-black dark:text-white">{students.length}</div>
                 <div className="text-xs font-black uppercase tracking-widest text-text3">Total Students</div>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function EducatorDashboard() {
         ) : (
           <div className="card fade-up-2 overflow-hidden p-0 border-2 border-border shadow-lg">
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-[14px]">
+              <table className="w-full border-collapse text-[12px] md:text-[14px]">
                 <thead>
                   <tr className="border-b-2 border-border bg-bg3">
                     {['Student Info', 'Age/Gender', 'Stress level', 'Predicted State', 'Focus Suggestions', 'Last Analysis'].map((h) => (

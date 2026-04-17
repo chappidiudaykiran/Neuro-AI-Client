@@ -107,14 +107,14 @@ export default function Support() {
 
   return (
     <div className="page theme-dashboard pt-14">
-      <div className="container py-4 max-w-4xl mx-auto">
-        <header className="page-header text-center py-4 mb-4 border-none">
-          <h1 className="page-title text-text">Educator Support</h1>
+      <div className="container py-2 md:py-4 max-w-4xl mx-auto px-3 md:px-6">
+        <header className="page-header text-center py-3 md:py-4 mb-2 md:mb-4 border-none">
+          <h1 className="page-title text-text text-2xl md:text-4xl">Educator Support</h1>
           <p className="text-[10px] font-black uppercase text-accent tracking-[0.2em] mt-1 opacity-60">Secure channel to educators</p>
         </header>
 
-        <div className="chat-container glass-panel h-[70vh] flex flex-col border-accent/10 shadow-2xl overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 bg-white/5">
+        <div className="chat-container glass-panel h-[calc(100vh-180px)] md:h-[70vh] flex flex-col border-accent/10 shadow-2xl overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-3 md:p-8 space-y-4 md:space-y-6 bg-white/5">
             {loading ? (
               <div className="loading-center py-20"><div className="spinner" /></div>
             ) : (!messages || messages.length === 0) ? (
@@ -131,12 +131,12 @@ export default function Support() {
                   
                   return (
                     <div key={i} className={`flex flex-col ${isSender ? 'items-end' : 'items-start'}`}>
-                      <div className={`p-4 rounded-[20px] text-[14px] leading-relaxed shadow-sm transition-all ${
+                      <div className={`p-3 md:p-4 rounded-[20px] text-[13px] md:text-[14px] leading-relaxed shadow-sm transition-all ${
                         isSender ? 'chat-bubble-sender' : 'chat-bubble-receiver'
-                      } max-w-[85%]`}>
+                      } max-w-[90%] md:max-w-[85%]`}>
                         {m.text}
                       </div>
-                      <span className="text-[10px] text-text3 mt-2 mx-2 opacity-60 font-bold uppercase tracking-tighter">
+                      <span className="text-[9px] md:text-[10px] text-text3 mt-1.5 md:mt-2 mx-2 opacity-60 font-bold uppercase tracking-tighter">
                         {isSender ? 'You' : 'Educator'} • {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
@@ -147,7 +147,7 @@ export default function Support() {
             )}
           </div>
 
-          <div className="p-4 bg-bg2/50 border-t border-border/10 backdrop-blur-md">
+          <div className="p-2 md:p-4 bg-bg2/50 border-t border-border/10 backdrop-blur-md">
             <form onSubmit={handleSend} className="chat-input-container">
                 <input
                   type="text"
