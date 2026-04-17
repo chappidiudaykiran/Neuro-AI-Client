@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getStudents } from '../api/predict'
 import { gradeLabel, stressLabel, stateLabel } from '../utils/helpers'
 import { useAuth } from '../context/AuthContext'
@@ -60,6 +61,7 @@ function StudentDetailModal({ student, onClose }) {
 
 export default function EducatorDashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedStudent, setSelectedStudent] = useState(null)
@@ -100,7 +102,7 @@ export default function EducatorDashboard() {
 
   return (
     <div className="page theme-dashboard">
-      <div className="container py-12 px-4 sm:px-8">
+      <div className="container max-w-[1600px] py-12 px-4 sm:px-8">
         <div className="fade-up mb-12">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-bg2 p-8 rounded-3xl border-2 border-border shadow-xl">
             <div className="flex items-center gap-6">
@@ -134,60 +136,10 @@ export default function EducatorDashboard() {
           </div>
         </div>
 
-        <div className="page-header mb-10">
-          <h2 className="text-xl font-black text-black dark:text-white flex items-center gap-3">
-            <span className="w-2 h-8 bg-accent rounded-full"></span>
-            Real-time Behavior Predictions
-          </h2>
-          <p className="text-text2 mt-1 font-medium">Monitoring student neurological and psychological states using ML insights.</p>
-        </div>
 
 
 
-        <div className="fade-up-2 mb-8">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <input className="input w-full" placeholder="Search students by name..." value={search} onChange={(e) => setSearch(e.target.value)} />
-            </div>
-            <div className="flex gap-2">
-              {states.map((s) => (
-                <button
-                  key={s.key}
-                  type="button"
-                  onClick={() => setFilter(filter === s.key ? 'all' : s.key)}
-                  className={`px-4 py-2 rounded-xl border-2 font-black text-[10px] uppercase tracking-wider transition-all shadow-sm ${filter === s.key ? s.tone : 'border-border bg-white dark:bg-bg3 text-text3 hover:border-border2'}`}
-                >
-                  {s.label} ({stateCounts[s.key]})
-                </button>
-              ))}
-              {filter !== 'all' && (
-                <button onClick={() => setFilter('all')} className="text-[10px] font-black uppercase text-accent hover:underline px-2">Clear</button>
-              )}
-            </div>
-          </div>
-        </div>
 
-        <div className="fade-up-2 mb-10">
-          <h2 className="text-xl font-black text-black dark:text-white mb-6 flex items-center gap-3">
-            <span className="w-2 h-8 bg-emerald-500 rounded-full"></span>
-            Class Distribution Insights
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {states.map((s) => {
-              const count = stateCounts[s.key]
-              const pct = students.length > 0 ? ((count / students.length) * 100).toFixed(0) : 0
-              return (
-                <div key={s.key} className={`p-6 rounded-3xl border-2 shadow-md flex flex-col items-center justify-center transition-transform hover:scale-[1.02] ${s.tone}`}>
-                  <div className="text-4xl font-black mb-1">{pct}%</div>
-                  <div className="text-[10px] font-black uppercase tracking-widest opacity-80">{s.label}</div>
-                  <div className="mt-4 w-full bg-black/10 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-current h-full" style={{ width: `${pct}%` }}></div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
 
         {error && <div className="alert alert-error">{error}</div>}
 
@@ -199,21 +151,21 @@ export default function EducatorDashboard() {
               <table className="w-full border-collapse text-[14px]">
                 <thead>
                   <tr className="border-b-2 border-border bg-bg3">
-                    {['Student Info', 'Age/Gender', 'Predicted Grade', 'Stress level', 'Predicted State', 'Focus Suggestions', 'Last Analysis'].map((h) => (
+                    {['Student Info', 'Age/Gender', 'Stress level', 'Predicted State', 'Focus Suggestions', 'Last Analysis'].map((h) => (
                       <th key={h} className="px-5 py-4 text-left text-[11px] font-black uppercase tracking-widest text-black/50 dark:text-white/50">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {filtered.length === 0 ? (
-                    <tr><td colSpan={7} className="px-4 py-20 text-center text-text3 font-bold text-lg">No students matching your search.</td></tr>
+                    <tr><td colSpan={6} className="px-4 py-20 text-center text-text3 font-bold text-lg">No students matching your search.</td></tr>
                   ) : filtered.map((s, i) => {
                     const p = s.latestPrediction
                     return (
                       <tr 
                         key={s._id} 
                         className={`group ${i % 2 === 0 ? 'bg-white dark:bg-bg2' : 'bg-bg dark:bg-bg'} hover:bg-accent/5 transition-colors cursor-pointer`}
-                        onClick={() => setSelectedStudent(s)}
+                        onClick={() => navigate(`/educator/support?studentId=${s._id}`)}
                       >
                         <td className="px-5 py-5">
                           <div className="font-black text-black dark:text-white text-base flex items-center gap-3">
@@ -229,7 +181,6 @@ export default function EducatorDashboard() {
                              <span className="opacity-70">{s.gender === 0 ? 'Female' : 'Male'}</span>
                           </div>
                         </td>
-                        <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-black text-[11px] border border-blue-200">{gradeLabel(p.grade)}</span> : <span className="text-text3">-</span>}</td>
                         <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-black text-[11px] border border-amber-200">{stressLabel(p.stress)}</span> : <span className="text-text3">-</span>}</td>
                         <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-black text-[11px] border border-emerald-200">{stateLabel(p.state)}</span> : <span className="text-text3">-</span>}</td>
                         <td className="px-5 py-5">

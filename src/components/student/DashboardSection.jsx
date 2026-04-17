@@ -89,7 +89,7 @@ export default function DashboardSection({ isHome = false }) {
       {/* 1. Psychological Monitor */}
       {!isHome && latest && (
         <section>
-          <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-4">
+          <div className="mb-6 flex items-center justify-between pb-4">
             <div className="flex items-center gap-3">
                <div className="p-2.5 rounded-xl bg-accent/10 text-accent">
                  <Brain size={24} />
@@ -173,7 +173,7 @@ export default function DashboardSection({ isHome = false }) {
 
         return (
           <section className="fade-up-2">
-            <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-4">
+            <div className="mb-6 flex items-center justify-between pb-4">
               <div className="flex items-center gap-3">
                  <div className={`p-2.5 rounded-xl ${currentStress === 0 ? 'bg-blue-500/10 text-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)]' : currentStress === 1 ? 'bg-amber-500/10 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]' : 'bg-red-500/10 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]'}`}>
                    <Zap size={24} className="animate-pulse" />
@@ -201,7 +201,7 @@ export default function DashboardSection({ isHome = false }) {
           {/* 2. Academic Performance Grading */}
           {grades.length > 0 && (
             <section className="fade-up-2">
-              <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-4">
+              <div className="mb-6 flex items-center justify-between pb-4">
                 <div className="flex items-center gap-3">
                    <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-500">
                      <GraduationCap size={24} />
@@ -285,7 +285,7 @@ export default function DashboardSection({ isHome = false }) {
 
           {/* 0. Enrolled Index */}
           <section className="fade-up">
-            <div className="mb-4 flex items-center justify-between border-b border-border/50 pb-2">
+            <div className="mb-4 flex items-center justify-between pb-2">
               <h3 className="text-xs font-black uppercase tracking-[0.2em] text-text3">Subscribed Subjects Matrix</h3>
             </div>
             <div className="glass-panel p-6 bg-bg2/10">
@@ -340,7 +340,7 @@ export default function DashboardSection({ isHome = false }) {
                 <div className="p-5 bg-black/5 dark:bg-black/20 border-t border-border/40">
                   <div className="mb-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-500 border border-orange-500/20 w-fit">
                     <Settings size={12} className="animate-spin-slow" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest truncate max-w-full">Active Link: http://10.0.2.24:8000/predict</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest truncate max-w-full">Active Link: https://neuro-ai-api-6zst.onrender.com/api/v1/predict</span>
                   </div>
                   
                   <div className="relative">
@@ -383,14 +383,6 @@ export default function DashboardSection({ isHome = false }) {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button 
-                      onClick={(e) => { e.preventDefault(); handlePredict(); }}
-                      disabled={isSyncing}
-                      className={`btn btn-primary bg-emerald-500 hover:bg-emerald-600 border-none px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-tighter shadow-lg shadow-emerald-500/20 flex items-center gap-2 ${isSyncing ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {isSyncing ? <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Zap size={14} />}
-                      {isSyncing ? 'Syncing...' : 'Trigger Fresh Analysis'}
-                    </button>
                     <div className="text-text3 transition-transform duration-300 group-open:rotate-180">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
                     </div>

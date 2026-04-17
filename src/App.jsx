@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar    from './components/Navbar'
 import Home      from './pages/Home'
+import './chat.css'
 import Login     from './pages/Login'
 import EducatorLogin from './pages/EducatorLogin'
 import Register  from './pages/Register'
@@ -18,6 +19,9 @@ import AssignmentPage from './pages/AssignmentPage'
 import EducatorDashboard from './pages/Educator'
 import ChangePassword from './pages/ChangePassword'
 import EditProfile from './pages/EditProfile'
+import Support from './pages/Support'
+import EducatorSupport from './pages/EducatorSupport'
+import SupportNotification from './components/SupportNotification'
 
 // Redirects to /login if not logged in
 function PrivateRoute({ children }) {
@@ -30,10 +34,10 @@ function PrivateRoute({ children }) {
 
 // Redirects to / if not an educator
 function EducatorRoute({ children }) {
-  const { user, isEducator, loading } = useAuth()
+  const { user, isEducator, isAdmin, loading } = useAuth()
   if (loading) return null
   if (!user) return <Navigate to="/login" replace />
-  if (!isEducator) return <Navigate to="/" replace />
+  if (!isEducator && !isAdmin) return <Navigate to="/" replace />
   return children
 }
 
@@ -41,6 +45,7 @@ function AppRoutes() {
   return (
     <>
       <Navbar />
+      <SupportNotification />
       <Routes>
         <Route path="/"         element={<Home />} />
         <Route path="/login"    element={<Login />} />
@@ -74,6 +79,9 @@ function AppRoutes() {
         <Route path="/student/change-password" element={
           <PrivateRoute><ChangePassword /></PrivateRoute>
         } />
+        <Route path="/support" element={
+          <PrivateRoute><Support /></PrivateRoute>
+        } />
 
         {/* Educator routes (manage subjects, assignments, student insights) */}
         <Route path="/educator" element={
@@ -90,6 +98,9 @@ function AppRoutes() {
         } />
         <Route path="/educator/assignments" element={
           <EducatorRoute><AdminAssignments /></EducatorRoute>
+        } />
+        <Route path="/educator/support" element={
+          <EducatorRoute><EducatorSupport /></EducatorRoute>
         } />
 
         {/* Keep old admin routes working as redirects */}

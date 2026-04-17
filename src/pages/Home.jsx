@@ -59,21 +59,22 @@ export default function Home() {
   const hasEnrolledSubjects = user?.selectedSubjects?.length > 0;
 
   return (
-    <div className="page bg-bg text-text selection:bg-accent/30 selection:text-accent">
+    <div className="page text-text selection:bg-accent/30 selection:text-accent"
+        style={{
+          background: `radial-gradient(ellipse top, rgba(135, 206, 250, 0.25) 0%, transparent 800px), linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 800px, var(--color-bg) 100%)`
+        }}>
       
       {/* ====== Hero ====== */}
-      {/* ====== Hero ====== */}
-      <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden border-b border-border"
-        style={{
-          background: `radial-gradient(ellipse at 50% 0%, rgba(135, 206, 250, 0.35), transparent 70%), linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%)`
-        }}>
+      <section className="relative flex min-h-[calc(100vh-64px)] items-center overflow-hidden">
         {/* Background decorative blurs */}
         <div className="absolute top-0 right-0 -m-32 h-96 w-96 rounded-full bg-accent/20 blur-[100px]" />
         <div className="absolute bottom-0 left-0 -m-32 h-[30rem] w-[30rem] rounded-full bg-blue-600/10 blur-[120px]" />
         <div className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `linear-gradient(var(--color-accent) 1px, transparent 1px), linear-gradient(90deg, var(--color-accent) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px'
+            backgroundSize: '60px 60px',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)'
           }}
         />
 
@@ -141,7 +142,7 @@ export default function Home() {
       </section>
 
       {user && !isEducator && hasEnrolledSubjects ? (
-        <section className="py-16 bg-bg relative border-b border-border">
+        <section className="py-16 relative">
           <div className="container max-w-6xl mx-auto space-y-16">
             <DashboardSection isHome={true} />
             <AssignmentsSection />
@@ -179,7 +180,7 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-sm text-text3 bg-bg flex flex-col items-center">
+      <footer className="mt-auto py-8 text-center text-sm text-text3 bg-slate-200/50 border-t border-slate-300/60 dark:border-none dark:bg-black/20 flex flex-col items-center">
         <p className="font-medium text-text2">© 2026 Neuro-AI · Adaptive Educational Intelligence</p>
         <p className="mt-1 opacity-80">Developed by students of CSE 3B Team 14</p>
       </footer>
