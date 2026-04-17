@@ -17,6 +17,9 @@ export default function DashboardSection({ isHome = false }) {
 
   const syncDashboard = async () => {
     try {
+      // Auto-trigger a fresh ML prediction on every page load
+      await triggerPredict().catch(err => console.warn('[Auto-predict]:', err.message))
+
       const [resResults, resSubjects, resPreview] = await Promise.all([
         getResults().catch(() => ({ data: [] })),
         getMySubjects().catch(() => ({ data: [] })),
@@ -73,7 +76,7 @@ export default function DashboardSection({ isHome = false }) {
     2: { label: 'High', color: 'text-rose-500', bg: 'bg-rose-500/10', border: 'border-rose-500/20', icon: AlertTriangle, desc: 'Warning: High cognitive stress detected. Your performance may decrease due to fatigue. We recommend switching to a lighter subject.' }
   }
 
-  const stressData = latest ? (stressMap[latest.stress ?? latest.rawResponse?.predictions?.psychological?.stress_class] || stressMap[0]) : stressMap[0]
+  const stressData = latest ? (stressMap[latest.stress ?? latest.rawResponse?.stress] || stressMap[0]) : stressMap[0]
   const Icon = stressData.icon
   const grades = mlPayload?.gradesBreakdown || []
 
@@ -132,12 +135,7 @@ export default function DashboardSection({ isHome = false }) {
                 </p>
               </div>
 
-              <div className="hidden lg:block shrink-0">
-                <div className="flex flex-col items-center gap-1 px-8 border-l border-border/50">
-                  <span className="text-4xl font-black text-text font-heading">{latest.stress}/2</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-text3">Index</span>
-                </div>
-              </div>
+
             </div>
           </div>
         </section>
@@ -148,7 +146,7 @@ export default function DashboardSection({ isHome = false }) {
         const subjectsCount = enrolledSubjects.length
         if (subjectsCount === 0 || !latest) return null;
 
-        const currentStress = latest.stress ?? latest.rawResponse?.predictions?.psychological?.stress_class
+        const currentStress = latest.stress ?? latest.rawResponse?.stress
 
         let tier1 = [], tier2 = [], tier3 = []
         if (subjectsCount === 1) {
@@ -330,7 +328,7 @@ export default function DashboardSection({ isHome = false }) {
                       <Database size={18} />
                     </div>
                     <div>
-                      <h3 className="text-[15px] font-bold text-text">Neural Matrix Input</h3>
+                      <h3 className="text-[15px] font-bold text-text">Input Matrix</h3>
                       <p className="text-[11px] text-text3">Raw JSON payload being sent to ML prediction link</p>
                     </div>
                   </div>
@@ -342,7 +340,7 @@ export default function DashboardSection({ isHome = false }) {
                 <div className="p-5 bg-black/5 dark:bg-black/20 border-t border-border/40">
                   <div className="mb-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-500 border border-orange-500/20 w-fit">
                     <Settings size={12} className="animate-spin-slow" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Active Link: http://10.0.2.24:8000/api/v1/predict</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest truncate max-w-full">Active Link: http://10.0.2.24:8000/predict</span>
                   </div>
                   
                   <div className="relative">
@@ -352,23 +350,15 @@ export default function DashboardSection({ isHome = false }) {
                     <pre className="p-4 rounded-xl bg-bg/80 border border-border/50 text-xs font-mono text-blue-500 dark:text-blue-400 overflow-x-auto max-h-[400px] scrollbar-thin">
 {JSON.stringify({
   student_id: user?._id,
-  timestamp: new Date().toISOString(),
-  neural_input: {
-    features: mlPayload?.payload || mlPayload
-  },
-  subject_logic_mapping: {
-    system_calculation: "Average of Enrolled Subjects",
-    difficulty_legend: { low_stress: "Easy", medium_stress: "Balanced", high_stress: "Tough" },
-    performance_breakdown: (mlPayload?.gradesBreakdown || []).map((g, i) => ({
-      index: i + 1,
-      name: g.subjectName,
-      metrics: {
-        results: `${g.assignmentPerformance}%`,
-        effort: `${g.watchProgress}%`,
-        consistency: `${g.consistencyScore}% (${g.activeDays} days)`,
-        final: g.calculatedGrade
-      }
-    }))
+  features: mlPayload?.payload || {
+    StudyHours: mlPayload?.StudyHours,
+    Attendance: mlPayload?.Attendance,
+    Resources: mlPayload?.Resources,
+    OnlineCourses: mlPayload?.OnlineCourses,
+    Discussions: mlPayload?.Discussions,
+    AssignmentCompletion: mlPayload?.AssignmentCompletion,
+    EduTech: mlPayload?.EduTech,
+    Extracurricular: mlPayload?.Extracurricular
   }
 }, null, 2)}
                     </pre>
@@ -388,7 +378,7 @@ export default function DashboardSection({ isHome = false }) {
                       <Database size={18} />
                     </div>
                     <div>
-                      <h3 className="text-[15px] font-bold text-text">Neural Matrix Output</h3>
+                      <h3 className="text-[15px] font-bold text-text">Output Matrix</h3>
                       <p className="text-[11px] text-text3">Raw JSON response received from ML prediction link</p>
                     </div>
                   </div>

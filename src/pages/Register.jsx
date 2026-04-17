@@ -99,7 +99,7 @@ export default function Register() {
               <label className="label auth-label">Email</label>
               <input className="input auth-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
             </div>
-            <div className="form-group grid grid-cols-2 gap-4">
+            <div className="form-group grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label auth-label">Age</label>
                 <input className="input auth-input" type="number" min="18" max="30" placeholder="22" value={form.age} onChange={set('age')} required />

@@ -6,17 +6,24 @@ export const stressColor = (s) => ['#22c55e', '#f59e0b', '#ef4444'][s] ?? '#888'
 export const stressBadge = (s) => ['badge-low', 'badge-medium', 'badge-high'][s] ?? ''
 
 export const stateLabel = (s) => ({
-  optimal:       'Optimal',
-  burnout_risk:  'Burnout Risk',
-  academic_gap:  'Academic Gap',
-  critical:      'Critical',
+  optimal:          'Optimal',
+  monitor:          'Monitor',
+  burnout_risk:     'Burnout Risk',
+  underperforming:  'Underperforming',
+  at_risk:          'At Risk',
+  critical:         'Critical',
+  // Legacy fallbacks
+  academic_gap:     'Academic Gap',
 })[s] ?? s
 
 export const stateColor = (s) => ({
-  optimal:       '#22c55e',
-  burnout_risk:  '#f59e0b',
-  academic_gap:  '#3b82f6',
-  critical:      '#ef4444',
+  optimal:          '#22c55e',
+  monitor:          '#3b82f6',
+  burnout_risk:     '#f59e0b',
+  underperforming:  '#8b5cf6',
+  at_risk:          '#f97316',
+  critical:         '#ef4444',
+  academic_gap:     '#3b82f6',
 })[s] ?? '#888'
 
 export const tagBadgeClass = (tag) => ({

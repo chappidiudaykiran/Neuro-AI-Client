@@ -100,7 +100,7 @@ export default function Navbar() {
             <img 
               src={isDark ? ecurveLogoDark : ecurveLogo} 
               alt="Ecurve" 
-              className="h-[22px] w-auto max-w-[140px] object-contain sm:h-7 md:h-8" 
+              className="h-[22px] w-auto max-w-[100px] sm:max-w-[140px] border-none outline-none object-contain sm:h-7 md:h-8"
               style={isDark ? { filter: 'brightness(0) invert(1)' } : {}}
             />
           </NavLink>

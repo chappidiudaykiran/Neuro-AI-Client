@@ -18,10 +18,13 @@ export default function PredictionBadge({ prediction }) {
   }[stress] || 'from-white/5 to-transparent border-black/10 dark:border-white/10'
 
   const stateTone = {
-    optimal: 'from-green-500/10 to-transparent border-green-500/20',
-    burnout_risk: 'from-amber-500/10 to-transparent border-amber-500/20',
-    academic_gap: 'from-blue-500/10 to-transparent border-blue-500/20',
-    critical: 'from-red-500/10 to-transparent border-red-500/20',
+    optimal:         'from-green-500/10 to-transparent border-green-500/20',
+    monitor:         'from-blue-500/10 to-transparent border-blue-500/20',
+    burnout_risk:    'from-amber-500/10 to-transparent border-amber-500/20',
+    underperforming: 'from-violet-500/10 to-transparent border-violet-500/20',
+    at_risk:         'from-orange-500/10 to-transparent border-orange-500/20',
+    critical:        'from-red-500/10 to-transparent border-red-500/20',
+    academic_gap:    'from-blue-500/10 to-transparent border-blue-500/20',
   }[state] || 'from-white/5 to-transparent border-black/10 dark:border-white/10'
 
   const gradeTextColor = {
@@ -38,10 +41,13 @@ export default function PredictionBadge({ prediction }) {
   }[stress] || 'text-text'
 
   const stateTextColor = {
-    optimal: 'text-green-600 dark:text-green-400',
-    burnout_risk: 'text-amber-600 dark:text-amber-400',
-    academic_gap: 'text-blue-600 dark:text-blue-400',
-    critical: 'text-red-600 dark:text-red-400',
+    optimal:         'text-green-600 dark:text-green-400',
+    monitor:         'text-blue-600 dark:text-blue-400',
+    burnout_risk:    'text-amber-600 dark:text-amber-400',
+    underperforming: 'text-violet-600 dark:text-violet-400',
+    at_risk:         'text-orange-600 dark:text-orange-400',
+    critical:        'text-red-600 dark:text-red-400',
+    academic_gap:    'text-blue-600 dark:text-blue-400',
   }[state] || 'text-text'
 
   return (
@@ -84,10 +90,13 @@ export default function PredictionBadge({ prediction }) {
           {stateLabel(state)}
         </div>
         <div className="text-[13px] text-text2 font-medium mt-1">
-          {state === 'optimal'      && 'All systems go!'}
-          {state === 'burnout_risk' && 'Pacing required'}
-          {state === 'academic_gap' && 'Focus needed'}
-          {state === 'critical'     && 'Intervention needed'}
+          {state === 'optimal'         && 'All systems go!'}
+          {state === 'monitor'         && 'Check-in recommended'}
+          {state === 'burnout_risk'    && 'Pacing required'}
+          {state === 'underperforming' && 'Motivation needed'}
+          {state === 'at_risk'         && 'Support required'}
+          {state === 'critical'        && 'Intervention needed'}
+          {state === 'academic_gap'    && 'Focus needed'}
         </div>
       </div>
     </div>

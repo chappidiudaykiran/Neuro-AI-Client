@@ -33,12 +33,12 @@ export default function AssignmentsSection() {
     <div className="fade-up">
       <div className="mb-6 flex items-center justify-between border-b border-border/50 pb-4">
         <div>
-          <h2 className="font-heading text-2xl font-extrabold tracking-tight text-text">Pending Assessments</h2>
+          <h2 className="font-heading text-2xl font-extrabold tracking-tight text-text">Assessments</h2>
           <p className="mt-1 text-sm text-text2">Complete video modules to unlock knowledge checks.</p>
         </div>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 w-full">
         {[...subjects]
           .sort((a, b) => {
             const aOpen = expandedSubjects.has(a._id)

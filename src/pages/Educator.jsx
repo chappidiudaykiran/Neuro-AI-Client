@@ -28,7 +28,7 @@ function StudentDetailModal({ student, onClose }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4">
             {[
               { label: 'Age', value: student.age },
               { label: 'Gender', value: genderLabels[student.gender] ?? 'Other' },
@@ -82,15 +82,19 @@ export default function EducatorDashboard() {
 
   const stateCounts = {
     optimal: students.filter((s) => s.latestPrediction?.state === 'optimal').length,
+    monitor: students.filter((s) => s.latestPrediction?.state === 'monitor').length,
     burnout_risk: students.filter((s) => s.latestPrediction?.state === 'burnout_risk').length,
-    academic_gap: students.filter((s) => s.latestPrediction?.state === 'academic_gap').length,
+    underperforming: students.filter((s) => s.latestPrediction?.state === 'underperforming').length,
+    at_risk: students.filter((s) => s.latestPrediction?.state === 'at_risk').length,
     critical: students.filter((s) => s.latestPrediction?.state === 'critical').length,
   }
 
   const states = [
     { key: 'optimal', label: 'Optimal', tone: 'text-green-300 border-green-500/40 bg-green-500/10' },
+    { key: 'monitor', label: 'Monitor', tone: 'text-blue-300 border-blue-500/40 bg-blue-500/10' },
     { key: 'burnout_risk', label: 'Burnout Risk', tone: 'text-amber-300 border-amber-500/40 bg-amber-500/10' },
-    { key: 'academic_gap', label: 'Academic Gap', tone: 'text-blue-300 border-blue-500/40 bg-blue-500/10' },
+    { key: 'underperforming', label: 'Underperforming', tone: 'text-violet-300 border-violet-500/40 bg-violet-500/10' },
+    { key: 'at_risk', label: 'At Risk', tone: 'text-orange-300 border-orange-500/40 bg-orange-500/10' },
     { key: 'critical', label: 'Critical', tone: 'text-red-300 border-red-500/40 bg-red-500/10' },
   ]
 
@@ -168,7 +172,7 @@ export default function EducatorDashboard() {
             <span className="w-2 h-8 bg-emerald-500 rounded-full"></span>
             Class Distribution Insights
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {states.map((s) => {
               const count = stateCounts[s.key]
               const pct = students.length > 0 ? ((count / students.length) * 100).toFixed(0) : 0
