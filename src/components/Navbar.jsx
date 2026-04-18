@@ -84,7 +84,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container flex items-center justify-between w-full h-full">
         {/* Logo Section & Mobile Toggle */}
-        <div className="flex items-center shrink-0 gap-1 sm:gap-2 -ml-12 sm:-ml-10">{/* Logo Section & Mobile Toggle */}
+        <div className="flex items-center shrink-0 gap-1 sm:gap-2">
           {user && (
             <button 
               type="button" 
@@ -157,7 +157,7 @@ export default function Navbar() {
         )}
 
         {/* Right Section (Profile / Auth) */}
-        <div className="flex items-center justify-end shrink-0 gap-3 -mr-12 sm:-mr-10">
+        <div className="flex items-center justify-end shrink-0 gap-3">
           <button 
             type="button" 
             onClick={toggleTheme}
