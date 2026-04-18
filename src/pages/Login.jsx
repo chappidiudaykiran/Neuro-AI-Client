@@ -74,7 +74,7 @@ export default function Login() {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="label auth-label">Email</label>
-                <input className="input auth-input" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
+                <input className="input auth-input" type="email" placeholder="example@gmail.com" value={form.email} onChange={set('email')} required />
               </div>
 
               <div className="form-group mb-6">
