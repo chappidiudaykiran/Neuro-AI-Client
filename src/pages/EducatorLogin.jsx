@@ -57,7 +57,7 @@ export default function EducatorLogin() {
             <form onSubmit={handleSubmit}>
               <div className="form-group hover:border-blue-500 transition-colors">
               <label className="label auth-label text-blue-700 dark:text-blue-300">Educator Email</label>
-                <input className="input auth-input focus:border-blue-500 focus:ring-blue-500/20" type="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
+                <input className="input auth-input focus:border-blue-500 focus:ring-blue-500/20" type="email" placeholder="example@gmail.com" value={form.email} onChange={set('email')} required />
               </div>
 
               <div className="form-group mb-6 hover:border-blue-500 transition-colors">
