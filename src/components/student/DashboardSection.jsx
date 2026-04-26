@@ -70,6 +70,26 @@ export default function DashboardSection({ isHome = false }) {
     return <div className="w-full flex items-center justify-center min-h-[60vh]"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
   }
 
+  if (enrolledSubjects.length === 0) {
+    return (
+      <div className={`fade-up ${isHome ? 'p-8' : 'min-h-[60vh]'} flex flex-col items-center justify-center text-center`}>
+        <div className="p-6 rounded-3xl bg-accent/10 text-accent mb-6 animate-pulse">
+            <GraduationCap size={64} />
+        </div>
+        <h2 className="text-3xl font-heading font-black text-text mb-3">No Subjects Enrolled</h2>
+        <p className="text-text2 text-lg max-w-md mb-8">
+            Enroll in a course from the library to start your learning journey and unlock real-time AI-driven stress calculations and performance analytics.
+        </p>
+        <button 
+            onClick={() => navigate('/courses')}
+            className="btn btn-primary px-8 py-3 text-lg font-bold shadow-xl shadow-accent/20 hover:scale-105 transition-transform"
+        >
+            Browse Course Library
+        </button>
+      </div>
+    )
+  }
+
   const stressMap = {
     0: { label: 'Low', color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', icon: CheckCircle2, desc: 'Your cognitive load is optimal. You exhibit high focus and low mental fatigue. Perfect time for complex problem solving.' },
     1: { label: 'Moderate', color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/20', icon: Activity, desc: 'Your brain is working hard. You are in a "Flow State" but approaching mental capacity. Consider a short break soon.' },
