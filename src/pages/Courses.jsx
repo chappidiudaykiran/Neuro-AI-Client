@@ -10,6 +10,7 @@ export default function Courses() {
   const [enrolledSubjects, setEnrolledSubjects] = useState([])
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState('')
+  const [showExplore, setShowExplore] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -81,24 +82,37 @@ export default function Courses() {
         )}
 
         {/* Content */}
-        <h2 className="mb-5 font-heading text-lg font-bold max-w-6xl mx-auto">Explore Categories</h2>
-        {loading && (
-          <div className="loading-center"><div className="spinner" /></div>
-        )}
-        {error && <div className="alert alert-error text-center mx-auto max-w-md">{error}</div>}
-        
-        {!loading && !error && categories.length === 0 && (
-          <div className="py-20 bg-bg2 rounded-2xl border border-border text-center text-text2 shadow-inner fade-up">
-            No categories available at the moment.
+        {!loading && enrolledSubjects.length > 0 && !showExplore ? (
+          <div className="text-center my-10 fade-up">
+            <button 
+              onClick={() => setShowExplore(true)}
+              className="btn btn-outline text-sm py-2.5 px-6 font-bold"
+            >
+              Explore More Courses
+            </button>
           </div>
-        )}
+        ) : (
+          <>
+            <h2 className="mb-5 font-heading text-lg font-bold max-w-6xl mx-auto">Explore Categories</h2>
+            {loading && (
+              <div className="loading-center"><div className="spinner" /></div>
+            )}
+            {error && <div className="alert alert-error text-center mx-auto max-w-md">{error}</div>}
+            
+            {!loading && !error && categories.length === 0 && (
+              <div className="py-20 bg-bg2 rounded-2xl border border-border text-center text-text2 shadow-inner fade-up">
+                No categories available at the moment.
+              </div>
+            )}
 
-        {!loading && !error && categories.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 fade-up-3 mb-20 max-w-6xl mx-auto">
-            {categories.map(({ category, count }) => (
-               <CategoryCard key={category} category={category} count={count} />
-            ))}
-          </div>
+            {!loading && !error && categories.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 fade-up-3 mb-20 max-w-6xl mx-auto">
+                {categories.map(({ category, count }) => (
+                   <CategoryCard key={category} category={category} count={count} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

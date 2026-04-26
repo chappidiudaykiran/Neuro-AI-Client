@@ -26,7 +26,7 @@ import SupportNotification from './components/SupportNotification'
 // Redirects to /login if not logged in
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
-  if (loading) return <div className="flex min-h-screen items-center justify-center">
+  if (loading) return <div className="w-full flex min-h-screen items-center justify-center">
     <div className="spinner" />
   </div>
   return user ? children : <Navigate to="/login" replace />

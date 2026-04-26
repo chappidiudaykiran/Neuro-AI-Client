@@ -67,7 +67,7 @@ export default function DashboardSection({ isHome = false }) {
   }, [])
 
   if (loading) {
-    return <div className="flex justify-center py-10"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
+    return <div className="w-full flex items-center justify-center min-h-[60vh]"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
   }
 
   const stressMap = {

@@ -26,7 +26,7 @@ export default function AssignmentsSection() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="flex justify-center py-10"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
+  if (loading) return <div className="w-full flex items-center justify-center min-h-[60vh]"><div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"/></div>
   if (subjects.length === 0) return null // Hide if no enrolled subjects
 
   return (

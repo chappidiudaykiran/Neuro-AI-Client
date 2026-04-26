@@ -114,7 +114,6 @@ export default function VideoPlayer() {
             <div className="mb-2">
               <div className="mb-1 flex flex-wrap items-center gap-2.5">
                 <h1 className="font-heading text-xl font-extrabold tracking-tight">{course.name}</h1>
-                <StressBadge tag={course.stressTag} />
               </div>
               {video && (
                 <p className="text-xs text-text2">

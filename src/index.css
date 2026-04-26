@@ -54,7 +54,7 @@
   }
 
   .page {
-    @apply min-h-screen pt-16;
+    @apply min-h-screen w-full pt-16;
   }
 
   .theme-dashboard {
@@ -233,7 +233,7 @@
   }
 
   .loading-center {
-    @apply flex min-h-[200px] items-center justify-center;
+    @apply flex min-h-[50vh] w-full items-center justify-center;
   }
 
   .fade-up {

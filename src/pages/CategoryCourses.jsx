@@ -54,7 +54,7 @@ export default function CategoryCourses() {
         </div>   
         {loading ? (
           <div className="text-center py-20 fade-up">
-            <div className="spinner mb-4" />
+            <div className="spinner mx-auto mb-4" />
             <p className="text-text3 font-medium">Loading modules...</p>
           </div>
         ) : error ? (
