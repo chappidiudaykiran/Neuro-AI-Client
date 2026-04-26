@@ -12,16 +12,16 @@ function StudentDetailModal({ student, onClose }) {
   const genderLabels = ['Female', 'Male', 'Non-binary', 'Other'];
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="w-full max-w-lg animate-fade-up rounded-2xl border-2 border-border bg-bg p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 md:p-4" onClick={onClose}>
+      <div className="w-full max-w-lg animate-fade-up rounded-2xl border-2 border-border bg-bg p-5 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Student Profile</h2>
+          <h2 className="text-lg md:text-2xl font-black text-black dark:text-white uppercase tracking-tight">Student Profile</h2>
           <button onClick={onClose} className="text-text3 hover:text-red-500 transition-colors text-2xl font-black">&times;</button>
         </div>
 
         <div className="space-y-6">
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-bg2 border-2 border-border shadow-inner">
-            <div className="w-16 h-16 rounded-full bg-blue-500 overflow-hidden flex items-center justify-center text-white text-2xl font-black shadow-lg">
+          <div className="flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl bg-bg2 border-2 border-border shadow-inner">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-500 overflow-hidden flex items-center justify-center text-white text-xl md:text-2xl font-black shadow-lg shrink-0">
               {student.photo ? (
                 <img src={student.photo} alt={student.name} className="w-full h-full object-cover" />
               ) : (
@@ -29,12 +29,12 @@ function StudentDetailModal({ student, onClose }) {
               )}
             </div>
             <div>
-              <div className="text-xl font-black text-black dark:text-white">{student.name}</div>
-              <div className="text-sm text-text2 font-medium">{student.email}</div>
+              <div className="text-base md:text-xl font-black text-black dark:text-white truncate">{student.name}</div>
+              <div className="text-xs md:text-sm text-text2 font-medium truncate">{student.email}</div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
             {[
               { label: 'Age', value: student.age },
               { label: 'Gender', value: genderLabels[student.gender] ?? 'Other' },
@@ -56,7 +56,7 @@ function StudentDetailModal({ student, onClose }) {
           </div>
         </div>
 
-        <div className="flex gap-4 mt-8">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-6 md:mt-8">
           <button 
             onClick={() => {
               navigate(`/educator/support?targetUid=${student._id}`);
@@ -166,80 +166,128 @@ export default function EducatorDashboard() {
         {loading ? (
           <div className="loading-center"><div className="spinner" /></div>
         ) : (
-          <div className="card fade-up-2 overflow-hidden p-0 border-2 border-border shadow-lg">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-[12px] md:text-[14px]">
-                <thead>
-                  <tr className="border-b-2 border-border bg-bg3">
-                    {['Student Info', 'Age/Gender', 'Stress level', 'Predicted State', 'Focus Suggestions', 'Last Analysis'].map((h) => (
-                      <th key={h} className="px-5 py-4 text-left text-[11px] font-black uppercase tracking-widest text-black/50 dark:text-white/50">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filtered.length === 0 ? (
-                    <tr><td colSpan={6} className="px-4 py-20 text-center text-text3 font-bold text-lg">No students matching your search.</td></tr>
-                  ) : filtered.map((s, i) => {
-                    const p = s.latestPrediction
-                    return (
-                      <tr 
-                        key={s._id} 
-                        className={`group ${i % 2 === 0 ? 'bg-white dark:bg-bg2' : 'bg-bg dark:bg-bg'} hover:bg-accent/5 transition-colors cursor-pointer`}
-                        onClick={() => navigate(`/educator/support?targetUid=${s._id}`)}
+          <>
+            {/* MOBILE: Card layout */}
+            <div className="md:hidden space-y-3 fade-up-2">
+              {filtered.length === 0 ? (
+                <div className="p-10 text-center text-text3 font-bold text-base">No students matching your search.</div>
+              ) : filtered.map((s) => {
+                const p = s.latestPrediction;
+                return (
+                  <div 
+                    key={s._id} 
+                    className="bg-white dark:bg-bg2 rounded-xl border border-border p-4 shadow-sm active:scale-[0.98] transition-transform"
+                    onClick={() => navigate(`/educator/support?targetUid=${s._id}`)}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div 
+                        className="w-11 h-11 rounded-full bg-blue-500/10 text-blue-500 overflow-hidden flex items-center justify-center text-sm font-black ring-1 ring-blue-500/20 shrink-0"
+                        onClick={(e) => { e.stopPropagation(); setSelectedStudent(s); }}
                       >
-                        <td className="px-5 py-5">
-                          <div className="flex items-center gap-3">
-                            <div 
-                              className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 overflow-hidden flex items-center justify-center text-xs font-black ring-1 ring-blue-500/20 cursor-pointer hover:ring-accent transition-all"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedStudent(s);
-                              }}
-                            >
-                              {s.photo ? (
-                                <img src={s.photo} alt={s.name} className="w-full h-full object-cover" />
-                              ) : (
-                                s.name?.[0]?.toUpperCase()
-                              )}
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="font-black text-black dark:text-white text-base hover:text-accent transition-colors"
+                        {s.photo ? (
+                          <img src={s.photo} alt={s.name} className="w-full h-full object-cover" />
+                        ) : (
+                          s.name?.[0]?.toUpperCase()
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-black text-black dark:text-white text-[14px] truncate">{s.name}</div>
+                        <div className="text-[11px] text-text3 truncate">{s.email}</div>
+                      </div>
+                      <svg className="w-4 h-4 text-text3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-bg3 text-text2 border border-border">{s.age || 20}Y • {s.gender === 0 ? 'F' : 'M'}</span>
+                      {p ? (
+                        <>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200/50">{stressLabel(p.stress)}</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50">{stateLabel(p.state)}</span>
+                        </>
+                      ) : (
+                        <span className="text-[10px] text-text3 italic">No analysis yet</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* DESKTOP: Table layout */}
+            <div className="hidden md:block card fade-up-2 overflow-hidden p-0 border-2 border-border shadow-lg">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-[14px]">
+                  <thead>
+                    <tr className="border-b-2 border-border bg-bg3">
+                      {['Student Info', 'Age/Gender', 'Stress level', 'Predicted State', 'Focus Suggestions', 'Last Analysis'].map((h) => (
+                        <th key={h} className="px-5 py-4 text-left text-[11px] font-black uppercase tracking-widest text-black/50 dark:text-white/50">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {filtered.length === 0 ? (
+                      <tr><td colSpan={6} className="px-4 py-20 text-center text-text3 font-bold text-lg">No students matching your search.</td></tr>
+                    ) : filtered.map((s, i) => {
+                      const p = s.latestPrediction
+                      return (
+                        <tr 
+                          key={s._id} 
+                          className={`group ${i % 2 === 0 ? 'bg-white dark:bg-bg2' : 'bg-bg dark:bg-bg'} hover:bg-accent/5 transition-colors cursor-pointer`}
+                          onClick={() => navigate(`/educator/support?targetUid=${s._id}`)}
+                        >
+                          <td className="px-5 py-5">
+                            <div className="flex items-center gap-3">
+                              <div 
+                                className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 overflow-hidden flex items-center justify-center text-xs font-black ring-1 ring-blue-500/20 cursor-pointer hover:ring-accent transition-all"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setSelectedStudent(s);
                                 }}
                               >
-                                {s.name}
-                              </span>
-                              <span className="text-[12px] text-text3 font-medium">{s.email}</span>
+                                {s.photo ? (
+                                  <img src={s.photo} alt={s.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  s.name?.[0]?.toUpperCase()
+                                )}
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="font-black text-black dark:text-white text-base hover:text-accent transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedStudent(s);
+                                  }}
+                                >
+                                  {s.name}
+                                </span>
+                                <span className="text-[12px] text-text3 font-medium">{s.email}</span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 font-bold text-text2">
-                          <div className="flex items-center gap-2">
-                             <span className="text-black dark:text-white">{s.age || 20} Yrs</span>
-                             <span className="w-1.5 h-1.5 rounded-full bg-border"></span>
-                             <span className="opacity-70">{s.gender === 0 ? 'Female' : 'Male'}</span>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-black text-[11px] border border-amber-200">{stressLabel(p.stress)}</span> : <span className="text-text3">-</span>}</td>
-                        <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-black text-[11px] border border-emerald-200">{stateLabel(p.state)}</span> : <span className="text-text3">-</span>}</td>
-                        <td className="px-5 py-5">
-                          {p?.suggestions?.length > 0 ? (
-                            <div className="flex flex-wrap gap-2">
-                              {p.suggestions.slice(0, 2).map((sg, j) => <span key={j} className="rounded-md border border-border bg-bg2 px-2.5 py-1 text-[11px] font-bold text-text dark:text-white shadow-sm">{sg.subject}</span>)}
-                              {p.suggestions.length > 2 && <span className="text-[11px] text-text3 font-bold">+{p.suggestions.length - 2} more</span>}
+                          </td>
+                          <td className="px-5 py-5 font-bold text-text2">
+                            <div className="flex items-center gap-2">
+                               <span className="text-black dark:text-white">{s.age || 20} Yrs</span>
+                               <span className="w-1.5 h-1.5 rounded-full bg-border"></span>
+                               <span className="opacity-70">{s.gender === 0 ? 'Female' : 'Male'}</span>
                             </div>
-                          ) : <span className="text-text3">-</span>}
-                        </td>
-                        <td className="px-5 py-5 text-[11px] font-bold text-text3 uppercase tracking-tighter">{p ? new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                          </td>
+                          <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-black text-[11px] border border-amber-200">{stressLabel(p.stress)}</span> : <span className="text-text3">-</span>}</td>
+                          <td className="px-5 py-5">{p ? <span className="px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-black text-[11px] border border-emerald-200">{stateLabel(p.state)}</span> : <span className="text-text3">-</span>}</td>
+                          <td className="px-5 py-5">
+                            {p?.suggestions?.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {p.suggestions.slice(0, 2).map((sg, j) => <span key={j} className="rounded-md border border-border bg-bg2 px-2.5 py-1 text-[11px] font-bold text-text dark:text-white shadow-sm">{sg.subject}</span>)}
+                                {p.suggestions.length > 2 && <span className="text-[11px] text-text3 font-bold">+{p.suggestions.length - 2} more</span>}
+                              </div>
+                            ) : <span className="text-text3">-</span>}
+                          </td>
+                          <td className="px-5 py-5 text-[11px] font-bold text-text3 uppercase tracking-tighter">{p ? new Date(p.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         <div className="h-16" />
