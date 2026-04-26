@@ -5,6 +5,7 @@ import { gradeLabel, stressLabel, stateLabel } from '../utils/helpers'
 import { useAuth } from '../context/AuthContext'
 
 function StudentDetailModal({ student, onClose }) {
+  const navigate = useNavigate();
   if (!student) return null;
   
   const learningStyles = ['Visual', 'Auditory', 'Reading/Writing', 'Kinesthetic'];
@@ -20,8 +21,12 @@ function StudentDetailModal({ student, onClose }) {
 
         <div className="space-y-6">
           <div className="flex items-center gap-4 p-4 rounded-xl bg-bg2 border-2 border-border shadow-inner">
-            <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-black shadow-lg">
-              {student.name?.[0]?.toUpperCase()}
+            <div className="w-16 h-16 rounded-full bg-blue-500 overflow-hidden flex items-center justify-center text-white text-2xl font-black shadow-lg">
+              {student.photo ? (
+                <img src={student.photo} alt={student.name} className="w-full h-full object-cover" />
+              ) : (
+                student.name?.[0]?.toUpperCase()
+              )}
             </div>
             <div>
               <div className="text-xl font-black text-black dark:text-white">{student.name}</div>
@@ -51,9 +56,21 @@ function StudentDetailModal({ student, onClose }) {
           </div>
         </div>
 
-        <button onClick={onClose} className="btn btn-primary w-full mt-8 shadow-lg font-black uppercase tracking-widest py-3">
-          Close Profile
-        </button>
+        <div className="flex gap-4 mt-8">
+          <button 
+            onClick={() => {
+              navigate(`/educator/support?targetUid=${student._id}`);
+              onClose();
+            }} 
+            className="btn btn-primary flex-1 shadow-lg font-black uppercase tracking-widest py-3 flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+            Chat with Student
+          </button>
+          <button onClick={onClose} className="btn bg-bg2 hover:bg-bg3 border border-border flex-1 shadow-md font-black uppercase tracking-widest py-3 text-text3">
+            Close
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -106,9 +123,12 @@ export default function EducatorDashboard() {
         <div className="fade-up mb-6 md:mb-12">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 bg-white dark:bg-bg2 p-4 md:p-8 rounded-2xl md:rounded-3xl border-2 border-border shadow-xl">
             <div className="flex items-center gap-4 md:gap-6">
-              <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-accent/10 flex items-center justify-center border-2 border-accent/20 shadow-inner shrink-0">
-                {/* User Icon */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent md:w-10 md:h-10"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-accent/10 overflow-hidden flex items-center justify-center border-2 border-accent/20 shadow-inner shrink-0">
+                {user?.photo ? (
+                  <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent md:w-10 md:h-10"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                )}
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 group">
@@ -165,14 +185,35 @@ export default function EducatorDashboard() {
                       <tr 
                         key={s._id} 
                         className={`group ${i % 2 === 0 ? 'bg-white dark:bg-bg2' : 'bg-bg dark:bg-bg'} hover:bg-accent/5 transition-colors cursor-pointer`}
-                        onClick={() => navigate(`/educator/support?studentId=${s._id}`)}
+                        onClick={() => navigate(`/educator/support?targetUid=${s._id}`)}
                       >
                         <td className="px-5 py-5">
-                          <div className="font-black text-black dark:text-white text-base flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-xs font-black ring-1 ring-blue-500/20">{s.name?.[0]?.toUpperCase()}</div>
-                            {s.name}
+                          <div className="flex items-center gap-3">
+                            <div 
+                              className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 overflow-hidden flex items-center justify-center text-xs font-black ring-1 ring-blue-500/20 cursor-pointer hover:ring-accent transition-all"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedStudent(s);
+                              }}
+                            >
+                              {s.photo ? (
+                                <img src={s.photo} alt={s.name} className="w-full h-full object-cover" />
+                              ) : (
+                                s.name?.[0]?.toUpperCase()
+                              )}
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-black text-black dark:text-white text-base hover:text-accent transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedStudent(s);
+                                }}
+                              >
+                                {s.name}
+                              </span>
+                              <span className="text-[12px] text-text3 font-medium">{s.email}</span>
+                            </div>
                           </div>
-                          <div className="text-[12px] text-text3 font-medium">{s.email}</div>
                         </td>
                         <td className="px-5 py-5 font-bold text-text2">
                           <div className="flex items-center gap-2">
@@ -203,6 +244,12 @@ export default function EducatorDashboard() {
 
         <div className="h-16" />
       </div>
+      {selectedStudent && (
+        <StudentDetailModal 
+          student={selectedStudent} 
+          onClose={() => setSelectedStudent(null)} 
+        />
+      )}
     </div>
   )
 }

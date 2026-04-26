@@ -41,10 +41,11 @@ export default function Support() {
       tickets.forEach(t => {
           if (!t) return;
           // Initial Message
+          const initSender = t.isEducatorInitiated ? '222222222222222222222222' : t.studentId;
           thread.push({ 
             _id: t._id, 
             text: t.message || '', 
-            sender: t.studentId || null, 
+            sender: initSender || null, 
             date: t.createdAt, 
             type: 'init' 
           });

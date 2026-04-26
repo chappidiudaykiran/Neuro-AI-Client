@@ -23,15 +23,61 @@ export default function EducatorSupport() {
 
   // Auto-select student from URL query param (e.g. from Insights page)
   useEffect(() => {
-    const studentId = searchParams.get('studentId');
-    if (studentId && students.length > 0 && !autoSelectedRef.current) {
-      const match = students.find(s => String(s.studentInfo?.id || s.studentInfo?._id || s._id) === studentId);
+    const studentId = searchParams.get('targetUid') || searchParams.get('studentId');
+    console.log('[DEBUG] Auto-select useEffect fired. URL studentId:', studentId, '| students count:', students.length);
+    if (!studentId) return;
+
+    // derived ID from current selected student
+    const currentSelectedId = String(selectedStudent?.studentInfo?.id || selectedStudent?.studentInfo?._id || selectedStudent?._id || '');
+    
+    // IF the URL student matches the selected one, don't re-select
+    if (currentSelectedId === studentId) return;
+
+    const tryAutoSelect = async () => {
+      // 1. Try to find in existing support summary
+      const match = students.find(s => {
+        const sid = String(s.studentInfo?.id || s.studentInfo?._id || s._id || '');
+        return sid === studentId;
+      });
+
       if (match) {
+        console.log('[DEBUG] Found match in summary:', JSON.stringify({ _id: match._id, name: match.studentInfo?.name }));
+        setLoadingMessages(true);
         setSelectedStudent(match);
-        autoSelectedRef.current = true;
+        return;
       }
-    }
-  }, [students, searchParams]);
+
+      console.log('[DEBUG] No match in summary. Fetching from /educator/students...');
+
+      // 2. If not in summary, fetch student info from general list
+      try {
+        setLoadingMessages(true);
+        const res = await api.get('/educator/students');
+        const allStudents = res.data;
+        const s = allStudents.find(user => String(user._id) === studentId);
+        if (s) {
+          console.log('[DEBUG] Found student from API:', JSON.stringify({ _id: s._id, name: s.name }));
+          setSelectedStudent({
+            _id: s._id,
+            studentInfo: { name: s.name, email: s.email, id: s._id },
+            lastMessage: 'New Conversation',
+            lastUpdate: new Date().toISOString(),
+            isNewThread: true
+          });
+        } else {
+          console.log('[DEBUG] Student NOT found in /educator/students either!');
+          setLoadingMessages(false);
+          // Optional: clear if not found at all
+          // setSelectedStudent(null);
+        }
+      } catch (err) {
+        console.error("Failed to fetch student info for auto-chat", err);
+        setLoadingMessages(false);
+      }
+    };
+
+    tryAutoSelect();
+  }, [searchParams, students, selectedStudent]);
 
   useEffect(() => {
     let interval;
@@ -67,7 +113,8 @@ export default function EducatorSupport() {
     try {
       const res = await api.get(`/support?studentId=${studentId}`);
       const thread = res.data.tickets.reduce((acc, t) => {
-        acc.push({ _id: t._id, text: t.message, sender: t.studentId, date: t.createdAt, type: 'init' });
+        const initSender = t.isEducatorInitiated ? '222222222222222222222222' : t.studentId;
+        acc.push({ _id: t._id, text: t.message, sender: initSender, date: t.createdAt, type: 'init' });
         t.replies.forEach(r => {
           acc.push({ _id: t._id, text: r.message, sender: r.senderId, date: r.createdAt, type: 'reply' });
         });
@@ -94,14 +141,44 @@ export default function EducatorSupport() {
   const handleReply = async (e) => {
     e.preventDefault();
     if (!reply || !selectedStudent) return;
-    const latestTicketId = messages.filter(m => m.type === 'init').pop()?._id;
-    if (!latestTicketId) return;
-
+    console.log('[DEBUG] handleReply | selectedStudent:', JSON.stringify({
+      _id: selectedStudent._id,
+      name: selectedStudent.studentInfo?.name,
+      isNewThread: selectedStudent.isNewThread,
+      messagesLen: messages.length,
+    }));
+    console.log('[DEBUG] handleReply | current user._id:', user?._id, '| user.id:', user?.id);
     try {
-      await api.post(`/support/${latestTicketId}/reply`, { message: reply });
+      if (selectedStudent.isNewThread || messages.length === 0) {
+        // Create new ticket for the student
+        const targetStudentId = selectedStudent._id;
+        if (!targetStudentId || targetStudentId === user?._id) {
+            throw new Error("Invalid student selection detected");
+        }
+
+        await api.post('/support', {
+          studentId: targetStudentId,
+          subject: 'Academic Support from Instructor',
+          message: reply
+        });
+      } else {
+        // Reply to existing ticket
+        const latestTicketId = messages.filter(m => m.type === 'init').pop()?._id;
+        if (!latestTicketId) {
+          // Fallback to creating a ticket if filtering failed
+          await api.post('/support', { studentId: selectedStudent._id, message: reply });
+        } else {
+          await api.post(`/support/${latestTicketId}/reply`, { message: reply });
+        }
+      }
+      
       setReply('');
       fetchStudentMessages(selectedStudent._id);
       fetchSummary();
+      // Remove isNewThread flag if it was there
+      if (selectedStudent.isNewThread) {
+        setSelectedStudent(prev => ({ ...prev, isNewThread: false }));
+      }
     } catch (err) {
       alert('Failed to send reply: ' + (err.response?.data?.message || err.message));
     }
@@ -134,8 +211,12 @@ export default function EducatorSupport() {
                     className={`p-4 md:p-5 flex items-start gap-3 md:gap-4 cursor-pointer transition-all border-b border-border/20 group hover:bg-accent/[0.03] ${selectedStudent?._id === s._id ? 'bg-accent/[0.05] border-l-4 border-l-accent' : 'border-l-4 border-l-transparent'}`}
                   >
                     <div className="relative shrink-0">
-                       <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center font-bold text-base md:text-lg shadow-inner transition-all ${selectedStudent?._id === s._id ? 'bg-accent text-white scale-105' : 'bg-accent/10 text-accent group-hover:bg-accent/20'}`}>
-                         {s.studentInfo.name.charAt(0)}
+                       <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden flex items-center justify-center font-bold text-base md:text-lg shadow-inner transition-all ${selectedStudent?._id === s._id ? 'bg-accent text-white scale-105' : 'bg-accent/10 text-accent group-hover:bg-accent/20'}`}>
+                         {s.studentInfo.photo ? (
+                           <img src={s.studentInfo.photo} alt={s.studentInfo.name} className="w-full h-full object-cover" />
+                         ) : (
+                           s.studentInfo.name.charAt(0)
+                         )}
                        </div>
                        <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-bg2 rounded-full" />
                     </div>
@@ -172,8 +253,12 @@ export default function EducatorSupport() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-2xl bg-accent text-white flex items-center justify-center font-bold shadow-lg text-sm md:text-base shrink-0">
-                    {selectedStudent.studentInfo.name.charAt(0)}
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-2xl bg-accent text-white overflow-hidden flex items-center justify-center font-bold shadow-lg text-sm md:text-base shrink-0">
+                    {selectedStudent.studentInfo.photo ? (
+                      <img src={selectedStudent.studentInfo.photo} alt={selectedStudent.studentInfo.name} className="w-full h-full object-cover" />
+                    ) : (
+                      selectedStudent.studentInfo.name.charAt(0)
+                    )}
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-[13px] md:text-[14px] font-bold text-text leading-none mb-0.5 truncate">{selectedStudent.studentInfo.name}</h3>
@@ -191,6 +276,8 @@ export default function EducatorSupport() {
                         const senderId = String(m.sender?._id || m.sender || '');
                         const isSender = (senderId === myId) || (m.type === 'reply' && !m.sender);
                         
+                        const studentName = selectedStudent?.studentInfo?.name || 'Student';
+                        
                         return (
                           <div key={i} className={`flex flex-col ${isSender ? 'items-end' : 'items-start'} animate-message-in`}>
                             <div className={`p-3 md:p-4 rounded-[20px] text-[13px] md:text-[14px] leading-relaxed transition-all shadow-sm ${
@@ -199,7 +286,7 @@ export default function EducatorSupport() {
                               {m.text}
                             </div>
                             <span className="text-[9px] md:text-[10px] text-text3 mt-1.5 md:mt-2 mx-2 opacity-60">
-                              {isSender ? 'You' : 'Student'} • {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              {isSender ? 'You' : studentName} • {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
                         );

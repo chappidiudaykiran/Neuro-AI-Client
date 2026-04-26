@@ -189,7 +189,7 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   <span className="hidden sm:flex flex-col leading-tight text-right mr-1">
                     <span className="text-[13px] font-bold uppercase text-text">
-                      {user.role === 'educator' ? 'Educator' : user.name}
+                      {user.name || (user.role === 'educator' ? 'Educator' : 'User')}
                     </span>
                     <span className="mt-1 text-[10px] capitalize text-text3">{roleLabel}</span>
                   </span>
