@@ -72,11 +72,11 @@ export default function DashboardSection({ isHome = false }) {
 
   if (enrolledSubjects.length === 0) {
     return (
-      <div className={`fade-up ${isHome ? 'p-8' : 'min-h-[60vh]'} flex flex-col items-center justify-center text-center`}>
-        <div className="p-6 rounded-3xl bg-accent/10 text-accent mb-6 animate-pulse">
+      <div className={`fade-up ${isHome ? 'p-8' : 'min-h-[40vh] pt-0 -mt-12 sm:-mt-16'} flex flex-col items-center justify-start text-center`}>
+        <div className="p-4 rounded-3xl bg-accent/10 text-accent mb-0 animate-pulse">
             <GraduationCap size={64} />
         </div>
-        <h2 className="text-3xl font-heading font-black text-text mb-3">No Subjects Enrolled</h2>
+        <h2 className="text-3xl font-heading font-black text-text mb-2 mt-[-8px]">No Subjects Enrolled</h2>
         <p className="text-text2 text-lg max-w-md mb-8">
             Enroll in a course from the library to start your learning journey and unlock real-time AI-driven stress calculations and performance analytics.
         </p>
